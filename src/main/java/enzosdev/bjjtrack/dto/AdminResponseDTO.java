@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class AdminResponseDTO {
 
-    private
+    private Long id;
+    private String name;
+    private String email;
 }
