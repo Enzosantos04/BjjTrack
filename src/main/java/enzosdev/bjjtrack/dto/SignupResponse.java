@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupDTO {
+public class SignupResponse {
 
-    private AcademyCreateDTO  academy;
+    private AcademyCreateDTO academy;
     private AdminCreateDTO admin;
 }
