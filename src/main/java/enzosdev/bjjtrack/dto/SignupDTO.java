@@ -1,4 +1,4 @@
 package enzosdev.bjjtrack.dto;
 
-public class AcademyDTO {
+public class SignupDTO {
 }
