@@ -15,7 +15,7 @@ public class AcademyMapper {
         }
         Academy academy = new Academy();
         academy.setName(dto.getName());
-        academy.setLogo_url(dto.getLogoUrl());
+        academy.setLogoUrl(dto.getLogoUrl());
         academy.setSlug(dto.getSlug());
         return academy;
     }
@@ -28,7 +28,7 @@ public class AcademyMapper {
         AcademyCreateResponseDTO dto = new AcademyCreateResponseDTO();
         dto.setId(academy.getId());
         dto.setName(academy.getName());
-        dto.setLogoUrl(academy.getLogo_url());
+        dto.setLogoUrl(academy.getLogoUrl());
         dto.setSlug(academy.getSlug());
         return dto;
     }
