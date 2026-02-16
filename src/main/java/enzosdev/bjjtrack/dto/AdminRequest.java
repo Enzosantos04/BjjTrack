@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AdminCreateDTO {
+public class AdminRequest {
 
     private String name;
     private String email;

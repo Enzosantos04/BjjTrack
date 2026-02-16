@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignupRequest{
 
-    private AcademyCreateDTO academy;
-    private AdminCreateDTO admin;
+    private AcademyRequest academy;
+    private AdminRequest admin;
 }

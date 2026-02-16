@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class SignupResponse {
-    private AcademyCreateResponseDTO academy;
-    private AdminResponseDTO admin;
+    private AcademyResponse academy;
+    private AdminResponse admin;
 }

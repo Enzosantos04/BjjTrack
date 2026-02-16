@@ -1,7 +1,7 @@
 package enzosdev.bjjtrack.mapper;
 
-import enzosdev.bjjtrack.dto.AcademyCreateDTO;
-import enzosdev.bjjtrack.dto.AcademyCreateResponseDTO;
+import enzosdev.bjjtrack.dto.AcademyRequest;
+import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class AcademyMapper {
 
 
-    public Academy toEntity(AcademyCreateDTO dto){
+    public Academy toEntity(AcademyRequest dto){
         if (dto == null) {
             return null;
         }
@@ -21,11 +21,11 @@ public class AcademyMapper {
     }
 
 
-    public AcademyCreateResponseDTO toResponse(Academy academy){
+    public AcademyResponse toResponse(Academy academy){
         if (academy == null) {
             return null;
         }
-        AcademyCreateResponseDTO dto = new AcademyCreateResponseDTO();
+        AcademyResponse dto = new AcademyResponse();
         dto.setId(academy.getId());
         dto.setName(academy.getName());
         dto.setLogoUrl(academy.getLogoUrl());

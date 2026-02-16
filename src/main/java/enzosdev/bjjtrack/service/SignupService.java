@@ -1,8 +1,8 @@
 package enzosdev.bjjtrack.service;
 
 import enzosdev.bjjtrack.config.PasswordEncoderConfig;
-import enzosdev.bjjtrack.dto.AcademyCreateResponseDTO;
-import enzosdev.bjjtrack.dto.AdminResponseDTO;
+import enzosdev.bjjtrack.dto.AcademyResponse;
+import enzosdev.bjjtrack.dto.AdminResponse;
 import enzosdev.bjjtrack.dto.SignupRequest;
 import enzosdev.bjjtrack.dto.SignupResponse;
 import enzosdev.bjjtrack.entity.Academy;
@@ -42,9 +42,9 @@ public class SignupService {
         String hashedPassword = passwordEncoderConfig.passwordEncoder().encode(request.getAdmin().getPassword());
         User admin = userMapper.toAdminEntity(request.getAdmin(), academy, hashedPassword);
         admin = userRepository.save(admin);
-        AcademyCreateResponseDTO academyResponse = academyMapper.toResponse(academy);
-        AdminResponseDTO adminResponseDTO = userMapper.toResponse(admin);
-        return signupMapper.toResponse(academyResponse, adminResponseDTO);
+        AcademyResponse academyResponse = academyMapper.toResponse(academy);
+        AdminResponse adminResponse = userMapper.toResponse(admin);
+        return signupMapper.toResponse(academyResponse, adminResponse);
     }
 
 }

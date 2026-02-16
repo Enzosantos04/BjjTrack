@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class AcademyCreateDTO {
+public class AcademyRequest {
 
     private String name;
     private String slug;

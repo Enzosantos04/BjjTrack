@@ -1,7 +1,7 @@
 package enzosdev.bjjtrack.mapper;
 
-import enzosdev.bjjtrack.dto.AdminCreateDTO;
-import enzosdev.bjjtrack.dto.AdminResponseDTO;
+import enzosdev.bjjtrack.dto.AdminRequest;
+import enzosdev.bjjtrack.dto.AdminResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ public class UserMapper {
 
 
 
-    public User toAdminEntity(AdminCreateDTO dto, Academy academy, String hashedPassword){
+    public User toAdminEntity(AdminRequest dto, Academy academy, String hashedPassword){
         if (dto == null) {
             return null;
         }
@@ -25,11 +25,11 @@ public class UserMapper {
     }
 
 
-    public AdminResponseDTO toResponse(User user){
+    public AdminResponse toResponse(User user){
         if(user == null) {
             return null;
         }
-        AdminResponseDTO dto = new AdminResponseDTO();
+        AdminResponse dto = new AdminResponse();
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
