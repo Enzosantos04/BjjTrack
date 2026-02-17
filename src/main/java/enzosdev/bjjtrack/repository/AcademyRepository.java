@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AcademyRepository extends JpaRepository<Academy, Long> {
+        boolean existsBySlug(String slug);
+        boolean existsByName(String name);
 }
