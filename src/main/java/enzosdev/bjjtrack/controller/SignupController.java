@@ -4,6 +4,7 @@ package enzosdev.bjjtrack.controller;
 import enzosdev.bjjtrack.dto.SignupRequest;
 import enzosdev.bjjtrack.dto.SignupResponse;
 import enzosdev.bjjtrack.service.SignupService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class SignupController {
 
 
     @PostMapping
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<SignupResponse> signup(@Valid  @RequestBody SignupRequest request) {
         SignupResponse response = signupService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
