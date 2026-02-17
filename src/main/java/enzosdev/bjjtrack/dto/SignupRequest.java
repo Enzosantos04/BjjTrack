@@ -1,9 +1,8 @@
 package enzosdev.bjjtrack.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Getter
 @Setter
@@ -11,6 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignupRequest{
 
+    @NotNull(message = "Academy information is required")
+    @Valid
     private AcademyRequest academy;
+    @NotNull(message = "Admin information is required")
+    @Valid
     private AdminRequest admin;
 }
