@@ -47,6 +47,10 @@ public class SignupService {
             throw new RuntimeException("Academy slug already exists");
         }
 
+        if(userRepository.existsByEmail(request.getAdmin().getEmail())){
+            throw new RuntimeException("Admin email already exists");
+        }
+
         Academy academy = academyMapper.toEntity(request.getAcademy());
         academy = academyRepository.save(academy);
         String hashedPassword = passwordEncoder.encode(request.getAdmin().getPassword());
