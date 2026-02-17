@@ -10,10 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 public class SignupRequest{
 
-    @NotNull(message = "Academy information is required")
     @Valid
     private AcademyRequest academy;
-    @NotNull(message = "Admin information is required")
     @Valid
     private AdminRequest admin;
 }
