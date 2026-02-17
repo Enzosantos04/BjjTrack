@@ -38,6 +38,15 @@ public class SignupService {
 
     @Transactional
     public SignupResponse signup(SignupRequest request){
+
+        if(academyRepository.existsByName(request.getAcademy().getName())){
+            throw new RuntimeException("Academy name already exists");
+        }
+
+        if(academyRepository.existsBySlug(request.getAcademy().getSlug())){
+            throw new RuntimeException("Academy slug already exists");
+        }
+
         Academy academy = academyMapper.toEntity(request.getAcademy());
         academy = academyRepository.save(academy);
         String hashedPassword = passwordEncoder.encode(request.getAdmin().getPassword());
