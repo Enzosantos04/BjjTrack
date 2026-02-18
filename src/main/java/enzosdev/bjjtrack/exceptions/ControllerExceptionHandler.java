@@ -16,7 +16,17 @@ public class ControllerExceptionHandler {
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("Status", "400");
-        errorResponse.put("error", "Empty fields are not allowed, try again");
+        errorResponse.put("error: ", "Empty fields are not allowed, try again");
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+
+    @ExceptionHandler(AcademyNameAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleAcademyNameAlreadyExistsException(AcademyNameAlreadyExistsException ex){
+        Map<String , String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "400");
+        response.put("error: ", "Academy name already exists, try again!");
+        return ResponseEntity.badRequest().body(response);
     }
 }
