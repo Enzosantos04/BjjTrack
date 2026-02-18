@@ -8,6 +8,8 @@ import enzosdev.bjjtrack.dto.SignupResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNameAlreadyExistsException;
+import enzosdev.bjjtrack.exceptions.AcademySlugAlreadyExistsException;
+import enzosdev.bjjtrack.exceptions.UserEmailAlreadyExistsException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.mapper.SignupMapper;
 import enzosdev.bjjtrack.mapper.UserMapper;
@@ -45,11 +47,11 @@ public class SignupService {
         }
 
         if(academyRepository.existsBySlug(request.getAcademy().getSlug())){
-            throw new RuntimeException("Academy slug already exists");
+            throw new AcademySlugAlreadyExistsException("Academy slug already exists");
         }
 
         if(userRepository.existsByEmail(request.getAdmin().getEmail())){
-            throw new RuntimeException("Admin email already exists");
+            throw new UserEmailAlreadyExistsException("Admin email already exists");
         }
 
         Academy academy = academyMapper.toEntity(request.getAcademy());
