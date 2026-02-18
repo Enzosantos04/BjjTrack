@@ -7,6 +7,7 @@ import enzosdev.bjjtrack.dto.SignupRequest;
 import enzosdev.bjjtrack.dto.SignupResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.exceptions.AcademyNameAlreadyExistsException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.mapper.SignupMapper;
 import enzosdev.bjjtrack.mapper.UserMapper;
@@ -40,7 +41,7 @@ public class SignupService {
     public SignupResponse signup(SignupRequest request){
 
         if(academyRepository.existsByName(request.getAcademy().getName())){
-            throw new RuntimeException("Academy name already exists");
+            throw new AcademyNameAlreadyExistsException("Academy name already exists");
         }
 
         if(academyRepository.existsBySlug(request.getAcademy().getSlug())){
