@@ -29,4 +29,14 @@ public class ControllerExceptionHandler {
         response.put("error: ", "Academy name already exists, try again!");
         return ResponseEntity.badRequest().body(response);
     }
+
+
+    @ExceptionHandler(AcademySlugAlreadyExistsException.class)
+    public ResponseEntity<Map<String,String>> handleAcademySlugAlreadyExistsException(AcademySlugAlreadyExistsException ex){
+        Map<String,String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "400");
+        response.put("error: ", "Academy slug already exists, try again!");
+        return ResponseEntity.badRequest().body(response);
+    }
 }
