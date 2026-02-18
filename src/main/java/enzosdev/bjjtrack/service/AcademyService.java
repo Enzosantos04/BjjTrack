@@ -1,5 +1,6 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.dto.AcademyRequest;
 import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
@@ -25,5 +26,12 @@ public class AcademyService {
     public Page<AcademyResponse> findAllAcademies(Pageable pageable){
        return academyRepository.findAll(pageable)
                .map(academyMapper::toResponse);
+    }
+
+    public void deleteAcademyById(Long id){
+        if (!academyRepository.existsById(id)){
+          throw new RuntimeException("Academy doesnt exists");
+        }
+        academyRepository.deleteById(id);
     }
 }
