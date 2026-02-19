@@ -3,10 +3,13 @@ package enzosdev.bjjtrack.service;
 import enzosdev.bjjtrack.dto.AcademyRequest;
 import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
+import enzosdev.bjjtrack.dto.UserResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
+import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
+import enzosdev.bjjtrack.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,12 +22,15 @@ public class AcademyService {
 
 
     private final AcademyRepository academyRepository;
+    private final UserRepository userRepository;
     private final AcademyMapper academyMapper;
+    private final UserMapper userMapper;
 
-
-    public AcademyService(AcademyRepository academyRepository, AcademyMapper academyMapper) {
+    public AcademyService(AcademyRepository academyRepository, UserRepository userRepository, AcademyMapper academyMapper, UserMapper userMapper) {
         this.academyRepository = academyRepository;
+        this.userRepository = userRepository;
         this.academyMapper = academyMapper;
+        this.userMapper = userMapper;
     }
 
     public Page<AcademyResponse> findAllAcademies(Pageable pageable){
@@ -65,4 +71,15 @@ public class AcademyService {
         return academyMapper.toResponse(updatedAcademy);
 
     }
+
+    public Page<UserResponse> listUsersByAcademyId(Long id, Pageable pageable){
+        if(!academyRepository.existsById(id)){
+            throw  new RuntimeException("academy does not exist");
+        }
+
+        return userRepository.findAll(pageable)
+                .map(userMapper::toResponse);
+
+    }
+
 }
