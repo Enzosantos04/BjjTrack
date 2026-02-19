@@ -2,11 +2,15 @@ package enzosdev.bjjtrack.service;
 
 import enzosdev.bjjtrack.dto.AcademyRequest;
 import enzosdev.bjjtrack.dto.AcademyResponse;
+import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
+import enzosdev.bjjtrack.entity.Academy;
+import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class AcademyService {
@@ -33,5 +37,32 @@ public class AcademyService {
           throw new RuntimeException("Academy doesnt exists");
         }
         academyRepository.deleteById(id);
+    }
+
+    public AcademyResponse updateAcademyById(Long id, AcademyUpdateRequest academyUpdateRequest){
+        Academy academy = academyRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Academy doesnt exists"));
+
+        if(academyUpdateRequest.getName() != null){
+            if(academyUpdateRequest.getName().isBlank()){
+                throw new EmptyFieldException("Academy name empty is not allowed!");
+            }
+            academy.setName(academyUpdateRequest.getName());
+        }
+        if(academyUpdateRequest.getSlug() !=  null){
+            if(academyUpdateRequest.getSlug().isBlank()){
+                throw new EmptyFieldException("Academy Slug empty is not allowed!");
+            }
+            academy.setSlug(academyUpdateRequest.getSlug());
+        }
+
+
+        if(academyUpdateRequest.getLogoUrl() != null){
+            academy.setLogoUrl(academyUpdateRequest.getLogoUrl());
+
+        }
+        Academy updatedAcademy = academyRepository.save(academy);
+        return academyMapper.toResponse(updatedAcademy);
+
     }
 }
