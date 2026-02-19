@@ -93,4 +93,11 @@ public class AcademyService {
 
     }
 
+    public AcademyResponse findAcademyBySlug(String slug){
+        Optional<Academy> academy  = academyRepository.findAcademyBySlugIgnoreCase(slug);
+        return academy.map(academyMapper::toResponse)
+                .orElseThrow(()-> new AcademyNotFoundException("Academy Not found"));
+
+    }
+
 }
