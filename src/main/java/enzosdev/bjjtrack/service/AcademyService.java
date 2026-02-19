@@ -5,6 +5,7 @@ import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
 import enzosdev.bjjtrack.dto.UserResponse;
 import enzosdev.bjjtrack.entity.Academy;
+import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.mapper.UserMapper;
@@ -40,14 +41,14 @@ public class AcademyService {
 
     public void deleteAcademyById(Long id){
         if (!academyRepository.existsById(id)){
-          throw new RuntimeException("Academy doesnt exists");
+          throw new AcademyNotFoundException("Academy doesnt exists");
         }
         academyRepository.deleteById(id);
     }
 
     public AcademyResponse updateAcademyById(Long id, AcademyUpdateRequest academyUpdateRequest){
         Academy academy = academyRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Academy doesnt exists"));
+                .orElseThrow(()-> new AcademyNotFoundException("Academy not foud."));
 
         if(academyUpdateRequest.getName() != null){
             if(academyUpdateRequest.getName().isBlank()){
@@ -74,7 +75,7 @@ public class AcademyService {
 
     public Page<UserResponse> listUsersByAcademyId(Long id, Pageable pageable){
         if(!academyRepository.existsById(id)){
-            throw  new RuntimeException("academy does not exist");
+            throw  new AcademyNotFoundException("Academy not found.");
         }
 
         return userRepository.findAll(pageable)
