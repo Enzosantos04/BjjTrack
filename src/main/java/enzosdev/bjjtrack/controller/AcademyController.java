@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.EntityManagerFactoryAccessor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class AcademyController {
 
     private final AcademyService academyService;
+    private final EntityManagerFactoryAccessor entityManagerFactoryAccessor;
 
-    public AcademyController(AcademyService academyService) {
+    public AcademyController(AcademyService academyService, EntityManagerFactoryAccessor entityManagerFactoryAccessor) {
         this.academyService = academyService;
+        this.entityManagerFactoryAccessor = entityManagerFactoryAccessor;
     }
 
 
@@ -52,6 +55,13 @@ public class AcademyController {
     @GetMapping("/{id}")
     public ResponseEntity<AcademyResponse> findAcademyById(@PathVariable Long id){
         AcademyResponse academy = academyService.findAcademyById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(academy);
+        return ResponseEntity.status(HttpStatus.FOUND).body(academy);
+    }
+
+
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<AcademyResponse> findAcademyBySlug(@PathVariable String slug){
+        AcademyResponse academy = academyService.findAcademyBySlug(slug);
+        return ResponseEntity.status(HttpStatus.FOUND).body(academy);
     }
 }
