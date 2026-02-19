@@ -1,8 +1,11 @@
 package enzosdev.bjjtrack.controller;
 
 
+import enzosdev.bjjtrack.dto.AcademyRequest;
 import enzosdev.bjjtrack.dto.AcademyResponse;
+import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
 import enzosdev.bjjtrack.service.AcademyService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,5 +34,11 @@ public class AcademyController {
     public ResponseEntity<?> deleteAcademyById(@PathVariable Long id){
         academyService.deleteAcademyById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AcademyResponse> updateAcademyById(@PathVariable Long id,@Valid @RequestBody AcademyUpdateRequest academyRequest){
+        AcademyResponse academy= academyService.updateAcademyById(id, academyRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(academy);
     }
 }
