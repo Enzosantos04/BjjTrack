@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.Optional;
+
 @Service
 public class AcademyService {
 
@@ -80,6 +82,14 @@ public class AcademyService {
 
         return userRepository.findAll(pageable)
                 .map(userMapper::toResponse);
+
+    }
+
+    public AcademyResponse findAcademyById(Long id){
+
+        Optional<Academy> academyResponse = academyRepository.findById(id);
+              return academyResponse.map(academyMapper::toResponse)
+                .orElseThrow(()-> new AcademyNotFoundException("Academy Not found"));
 
     }
 
