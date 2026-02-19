@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.*;
 public class AcademyController {
 
     private final AcademyService academyService;
-    private final EntityManagerFactoryAccessor entityManagerFactoryAccessor;
 
-    public AcademyController(AcademyService academyService, EntityManagerFactoryAccessor entityManagerFactoryAccessor) {
+    public AcademyController(AcademyService academyService) {
         this.academyService = academyService;
-        this.entityManagerFactoryAccessor = entityManagerFactoryAccessor;
+
     }
 
 
