@@ -49,4 +49,13 @@ public class ControllerExceptionHandler {
         response.put("error: ", "User email already exists, try again!");
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(EmptyFieldException.class)
+    public ResponseEntity<Map<String,String >> handleEmptyFieldException(EmptyFieldException ex){
+        Map<String,String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "400");
+        response.put("error: ", "Empty Field are not allowed, try again!");
+        return ResponseEntity.badRequest().body(response);
+    }
 }
