@@ -50,4 +50,10 @@ public class AcademyController {
         Page<UserResponse> users = academyService.listUsersByAcademyId(id,pageable);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AcademyResponse> findAcademyById(@PathVariable Long id){
+        AcademyResponse academy = academyService.findAcademyById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(academy);
+    }
 }
