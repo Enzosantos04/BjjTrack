@@ -3,6 +3,7 @@ package enzosdev.bjjtrack.mapper;
 import enzosdev.bjjtrack.dto.AdminResponse;
 import enzosdev.bjjtrack.dto.UserRequest;
 import enzosdev.bjjtrack.dto.UserResponse;
+import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -10,19 +11,12 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
 
-    public User toUserEntity(UserRequest dto, String hashedPassword){
-        if (dto == null) {
-            return null;
-        }
+    public User toUserEntity(UserRequest dto,Academy academy, String hashedPassword){
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(hashedPassword);
-        if(user.getAcademy() != null){
-            dto.setAcademyId(user.getAcademy().getId());
-
-        }
-        dto.setAcademy(user.getAcademy());
+        user.setAcademy(academy);
         user.setActive(true);
         return user;
     }
@@ -35,8 +29,9 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setAcademyId(user.getAcademy().getId());
-
+        if (user.getAcademy() != null) {
+            dto.setAcademyId(user.getAcademy().getId());
+        }
         return dto;
 
     }
