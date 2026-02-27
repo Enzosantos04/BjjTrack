@@ -75,15 +75,6 @@ public class AcademyService {
 
     }
 
-    public Page<UserResponse> listUsersByAcademyId(Long id, Pageable pageable){
-        if(!academyRepository.existsById(id)){
-            throw  new AcademyNotFoundException("Academy not found.");
-        }
-
-        return userRepository.findAll(pageable)
-                .map(userMapper::toResponse);
-
-    }
 
     public AcademyResponse findAcademyById(Long id){
 
