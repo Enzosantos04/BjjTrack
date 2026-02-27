@@ -5,6 +5,7 @@ import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
+import enzosdev.bjjtrack.exceptions.UserEmailAlreadyExistsException;
 import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
@@ -31,6 +32,10 @@ public class UserService {
     }
 
     public UserResponse createUser(UserRequest userRequest){
+
+     if (userRepository.existsByEmail(userRequest.getEmail())){
+         throw new UserEmailAlreadyExistsException("email already exists");
+     }
         Academy academy = academyRepository.findById(userRequest.getAcademyId())
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
         String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
