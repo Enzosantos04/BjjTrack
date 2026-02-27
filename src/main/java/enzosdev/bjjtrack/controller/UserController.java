@@ -1,14 +1,13 @@
 package enzosdev.bjjtrack.controller;
 
-import enzosdev.bjjtrack.dto.UserRequest;
-import enzosdev.bjjtrack.dto.UserResponse;
+import enzosdev.bjjtrack.dto.*;
 import enzosdev.bjjtrack.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -25,5 +24,17 @@ public class UserController {
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
         UserResponse userResponse = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
+        UserResponse user = userService.UpdateUserById(id, userUpdateRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @GetMapping("academy/{id}/users")
+    public ResponseEntity<Page<UserResponse>> findAllUsersByAcademyId(@PathVariable Long id, Pageable pageable){
+        Page<UserResponse> users = userService.listUsersByAcademyId(id,pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }
