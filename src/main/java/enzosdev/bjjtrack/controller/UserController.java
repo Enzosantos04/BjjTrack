@@ -37,4 +37,12 @@ public class UserController {
         Page<UserResponse> users = userService.listUsersByAcademyId(id,pageable);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
