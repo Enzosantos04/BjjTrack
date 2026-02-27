@@ -1,15 +1,15 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.dto.AcademyRequest;
-import enzosdev.bjjtrack.dto.AcademyResponse;
-import enzosdev.bjjtrack.dto.UserRequest;
-import enzosdev.bjjtrack.dto.UserResponse;
+import enzosdev.bjjtrack.dto.*;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
+import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +37,38 @@ public class UserService {
         User user = userMapper.toUserEntity(userRequest, academy, hashedPassword);
         user = userRepository.save(user);
         return userMapper.toResponse(user);
+    }
+
+    public UserResponse UpdateUserById(Long id, UserUpdateRequest userUpdateRequest){
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
+        if(userUpdateRequest.getName() != null){
+            if (userUpdateRequest.getName().isBlank()){
+                throw new EmptyFieldException("User name empty is not allowed");
+            }
+            user.setName(userUpdateRequest.getName());
+        }
+
+        if(userUpdateRequest.getEmail() != null){
+            if(userUpdateRequest.getEmail().isBlank()){
+                throw new EmptyFieldException("User email empty is not allowed");
+            }
+            user.setEmail(userUpdateRequest.getEmail());
+        }
+        User updatedUser = userRepository.save(user);
+        return userMapper.toResponse(updatedUser);
+
+    }
+
+    public Page<UserResponse> listUsersByAcademyId(Long id, Pageable pageable){
+        if(!academyRepository.existsById(id)){
+            throw  new AcademyNotFoundException("Academy not found.");
+        }
+
+
+        return userRepository.findByAcademyId(id, pageable)
+                .map(userMapper::toResponse);
+
     }
 }
