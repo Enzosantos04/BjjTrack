@@ -76,4 +76,11 @@ public class UserService {
                 .map(userMapper::toResponse);
 
     }
+
+    public void deleteUserById(Long id){
+        userRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
+        userRepository.deleteById(id);
+    }
 }
