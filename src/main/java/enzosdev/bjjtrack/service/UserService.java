@@ -47,7 +47,7 @@ public class UserService {
 
     public UserResponse UpdateUserById(Long id, UserUpdateRequest userUpdateRequest){
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found"));
 
         if(userUpdateRequest.getName() != null){
             if (userUpdateRequest.getName().isBlank()){
