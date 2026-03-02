@@ -6,6 +6,7 @@ import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.exceptions.UserEmailAlreadyExistsException;
+import enzosdev.bjjtrack.exceptions.UserNotFoundException;
 import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
@@ -83,7 +84,7 @@ public class UserService {
 
     public void deleteUserById(Long id){
         userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found"));
 
         userRepository.deleteById(id);
     }
