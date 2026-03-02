@@ -3,14 +3,12 @@ package enzosdev.bjjtrack.controller;
 
 import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
-import enzosdev.bjjtrack.dto.UserResponse;
 import enzosdev.bjjtrack.service.AcademyService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.jpa.EntityManagerFactoryAccessor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
