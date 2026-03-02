@@ -100,4 +100,10 @@ public class UserService {
         return user.map(userMapper::toResponse)
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
+
+    public UserResponse findUserById(Long id){
+        Optional<User> user = userRepository.findById(id);
+        return user.map(userMapper::toResponse)
+                .orElseThrow(() -> new UserNotFoundException("User not Found"));
+    }
 }
