@@ -59,6 +59,10 @@ public class UserService {
             if(userUpdateRequest.getEmail().isBlank()){
                 throw new EmptyFieldException("User email empty is not allowed");
             }
+
+            if(userRepository.existsByEmail(userUpdateRequest.getEmail())){
+                throw new UserEmailAlreadyExistsException("This email is already in use.");
+            }
             user.setEmail(userUpdateRequest.getEmail());
         }
         User updatedUser = userRepository.save(user);
