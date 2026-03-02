@@ -45,4 +45,10 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> findAllUser(Pageable pageable){
+        Page<UserResponse> users = userService.findAllUser(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
 }
