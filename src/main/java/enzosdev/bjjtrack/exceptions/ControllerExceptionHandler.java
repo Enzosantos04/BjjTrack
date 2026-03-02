@@ -71,5 +71,14 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String >> handleUserNotFoundException(UserNotFoundException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "404");
+        response.put("error: ", "User Not Found");
+        return ResponseEntity.badRequest().body(response);
+    }
+
 
 }
