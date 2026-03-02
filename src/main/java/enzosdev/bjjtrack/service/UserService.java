@@ -34,7 +34,7 @@ public class UserService {
 
     public UserResponse createUser(UserRequest userRequest){
 
-     if (userRepository.existsByEmail(userRequest.getEmail())){
+     if (userRepository.existsByAcademyIdAndEmailIgnoreCase(userRequest.getAcademyId(), userRequest.getEmail())){
          throw new UserEmailAlreadyExistsException("email already exists");
      }
         Academy academy = academyRepository.findById(userRequest.getAcademyId())
@@ -60,8 +60,9 @@ public class UserService {
             if(userUpdateRequest.getEmail().isBlank()){
                 throw new EmptyFieldException("User email empty is not allowed");
             }
+            Long academyId = user.getAcademy().getId();
 
-            if(userRepository.existsByEmail(userUpdateRequest.getEmail())){
+            if(userRepository.existsByAcademyIdAndEmailIgnoreCaseAndIdNot(academyId, userUpdateRequest.getEmail(), user.getId())){
                 throw new UserEmailAlreadyExistsException("This email is already in use.");
             }
             user.setEmail(userUpdateRequest.getEmail());
