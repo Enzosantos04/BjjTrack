@@ -87,4 +87,10 @@ public class UserService {
 
         userRepository.deleteById(id);
     }
+
+
+    public Page<UserResponse> findAllUser(Pageable pageable){
+        return userRepository.findAll(pageable)
+                .map(userMapper::toResponse);
+    }
 }
