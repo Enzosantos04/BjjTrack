@@ -108,16 +108,16 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
 
-    public UserResponse deactivateUserById(Long id){
+    public void deactivateUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
         user.setActive(false);
         User deactivatedUser = userRepository.save(user);
-        return userMapper.toResponse(deactivatedUser);
+        userMapper.toResponse(deactivatedUser);
     }
 
-    public UserResponse activateUserById(Long id){
+    public void activateUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
@@ -128,7 +128,7 @@ public class UserService {
         }
 
         User activatedUser = userRepository.save(user);
-        return userMapper.toResponse(activatedUser);
+        userMapper.toResponse(activatedUser);
     }
 
 
