@@ -25,15 +25,12 @@ public class AcademyService {
 
 
     private final AcademyRepository academyRepository;
-    private final UserRepository userRepository;
     private final AcademyMapper academyMapper;
-    private final UserMapper userMapper;
 
-    public AcademyService(AcademyRepository academyRepository, UserRepository userRepository, AcademyMapper academyMapper, UserMapper userMapper) {
+    public AcademyService(AcademyRepository academyRepository, AcademyMapper academyMapper) {
         this.academyRepository = academyRepository;
-        this.userRepository = userRepository;
         this.academyMapper = academyMapper;
-        this.userMapper = userMapper;
+
     }
 
     public Page<AcademyResponse> findAllAcademies(Pageable pageable){
