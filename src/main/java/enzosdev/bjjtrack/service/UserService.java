@@ -117,5 +117,19 @@ public class UserService {
         return userMapper.toResponse(deactivatedUser);
     }
 
+    public UserResponse activateUserById(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        if(!user.getActive()){
+            user.setActive(true);
+        }else{
+            throw new RuntimeException("User already activated");
+        }
+
+        User activatedUser = userRepository.save(user);
+        return userMapper.toResponse(activatedUser);
+    }
+
 
 }
