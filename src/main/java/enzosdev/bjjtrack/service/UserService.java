@@ -95,9 +95,9 @@ public class UserService {
         return userRepository.findAll(pageable)
                 .map(userMapper::toResponse);
     }
-
-    public UserResponse findUserByEmail(String email){
-        Optional<User> user = userRepository.findUserByEmailIgnoreCase(email);
+    //refatorar pois estar retornando mais de um email
+    public UserResponse findUserByEmail(String email, Long academyId){
+        Optional<User> user = userRepository.findByEmailIgnoreCaseAndAcademyId(email, academyId);
         return user.map(userMapper::toResponse)
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
