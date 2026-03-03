@@ -32,12 +32,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping("academy/{id}/users")
-    public ResponseEntity<Page<UserResponse>> findAllUsersByAcademyId(@PathVariable Long id, Pageable pageable){
-        Page<UserResponse> users = userService.listUsersByAcademyId(id,pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(users);
-    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id){
