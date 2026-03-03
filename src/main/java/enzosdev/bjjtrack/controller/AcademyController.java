@@ -3,7 +3,9 @@ package enzosdev.bjjtrack.controller;
 
 import enzosdev.bjjtrack.dto.AcademyResponse;
 import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
+import enzosdev.bjjtrack.dto.UserResponse;
 import enzosdev.bjjtrack.service.AcademyService;
+import enzosdev.bjjtrack.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 public class AcademyController {
 
     private final AcademyService academyService;
+    private final UserService userService;
 
-    public AcademyController(AcademyService academyService) {
+    public AcademyController(AcademyService academyService, UserService userService) {
         this.academyService = academyService;
+        this.userService = userService;
 
     }
 
@@ -42,7 +46,11 @@ public class AcademyController {
         return ResponseEntity.status(HttpStatus.OK).body(academy);
     }
 
-
+    @GetMapping("{academyId}/users")
+    public ResponseEntity<Page<UserResponse>> findAllUsersByAcademyId(@PathVariable Long academyId, Pageable pageable){
+        Page<UserResponse> users = userService.listUsersByAcademyId(academyId,pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
 
 
     @GetMapping("/{id}")
