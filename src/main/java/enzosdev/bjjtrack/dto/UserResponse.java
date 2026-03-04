@@ -14,6 +14,5 @@ public class UserResponse {
     private Long id;
     private String name;
     private String email;
-    private Boolean active;
     private Long academyId;
 }
