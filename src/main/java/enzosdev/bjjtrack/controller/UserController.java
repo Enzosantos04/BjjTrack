@@ -58,14 +58,14 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<UserResponse> deactivateUserById(@PathVariable Long id){
-        UserResponse userResponse = userService.deactivateUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    public ResponseEntity<?> deactivateUserById(@PathVariable Long id){
+       userService.deactivateUserById(id);
+        return ResponseEntity.noContent().build();
 
     }
 
     @PatchMapping("/{id}/activate")
-    public ResponseEntity<UserResponse> activateUserById(@PathVariable Long id){
+    public ResponseEntity<?> activateUserById(@PathVariable Long id){
         userService.activateUserById(id);
         return ResponseEntity.noContent().build();
     }
