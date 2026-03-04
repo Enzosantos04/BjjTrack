@@ -29,7 +29,6 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setActive(true);
         if (user.getAcademy() != null) {
             dto.setAcademyId(user.getAcademy().getId());
         }
