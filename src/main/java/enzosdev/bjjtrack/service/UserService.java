@@ -112,6 +112,9 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
+        if(!user.getActive()){
+            throw new RuntimeException("User already deactivated");
+        }
         user.setActive(false);
         User deactivatedUser = userRepository.save(user);
         userMapper.toResponse(deactivatedUser);
