@@ -80,5 +80,22 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(UserAlreadyActivatedException.class)
+    public ResponseEntity<Map<String, String>> handleUserAlreadyActivatedException(UserAlreadyActivatedException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "400");
+        response.put("error: ", "User already activated.");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(UserAlreadyDeactivatedException.class)
+    public ResponseEntity<Map<String, String>> handleUserAlreadyDeactivatedException(UserAlreadyDeactivatedException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status", "400");
+        response.put("error: ", "User already deactivated.");
+        return ResponseEntity.badRequest().body(response);
+    }
 
 }
