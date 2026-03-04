@@ -1,5 +1,6 @@
 package enzosdev.bjjtrack.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import enzosdev.bjjtrack.enums.Belt;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Student {
     private Academy academy;
 
     @Column(name = "brith_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate brithDate;
 
     @Enumerated(EnumType.STRING)
