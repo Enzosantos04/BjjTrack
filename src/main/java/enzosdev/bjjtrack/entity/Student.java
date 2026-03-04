@@ -1,4 +1,41 @@
 package enzosdev.bjjtrack.entity;
 
+import enzosdev.bjjtrack.enums.Belt;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "student")
 public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "academy_id", nullable = false)
+    private Academy academy;
+
+    @Column(name = "brith_date")
+    private LocalDate brithDate;
+
+    @Enumerated(EnumType.STRING)
+    private Belt belt;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+
 }
