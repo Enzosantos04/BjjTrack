@@ -3,10 +3,7 @@ package enzosdev.bjjtrack.service;
 import enzosdev.bjjtrack.dto.*;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
-import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
-import enzosdev.bjjtrack.exceptions.EmptyFieldException;
-import enzosdev.bjjtrack.exceptions.UserEmailAlreadyExistsException;
-import enzosdev.bjjtrack.exceptions.UserNotFoundException;
+import enzosdev.bjjtrack.exceptions.*;
 import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
@@ -113,7 +110,7 @@ public class UserService {
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
         if(!user.getActive()){
-            throw new RuntimeException("User already deactivated");
+            throw new UserAlreadyDeactivatedException("User already deactivated");
         }
         user.setActive(false);
         User deactivatedUser = userRepository.save(user);
@@ -127,7 +124,7 @@ public class UserService {
         if(!user.getActive()){
             user.setActive(true);
         }else{
-            throw new RuntimeException("User already activated");
+            throw new UserAlreadyActivatedException("User already activated");
         }
 
         User activatedUser = userRepository.save(user);
