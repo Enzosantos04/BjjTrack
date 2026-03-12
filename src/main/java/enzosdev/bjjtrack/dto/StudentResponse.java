@@ -14,6 +14,8 @@ import java.time.LocalDate;
 @Setter
 public class StudentResponse {
     private Long id;
+    private String name;
+    private String email;
     private Long userId;
     private Long academyId;
     private LocalDate birthDate;
