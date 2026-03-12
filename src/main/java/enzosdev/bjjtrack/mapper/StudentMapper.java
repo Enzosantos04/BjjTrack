@@ -29,6 +29,8 @@ public class StudentMapper {
 
         StudentResponse dto = new StudentResponse();
         dto.setId(student.getId());
+        dto.setName(student.getUser().getName());
+        dto.setEmail(student.getUser().getEmail());
         dto.setBirthDate(student.getBrithDate());
         dto.setBelt(student.getBelt());
         if (student.getAcademy() != null){
