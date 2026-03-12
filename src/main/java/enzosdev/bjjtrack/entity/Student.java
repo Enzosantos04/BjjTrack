@@ -36,8 +36,4 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private Belt belt;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-
 }
