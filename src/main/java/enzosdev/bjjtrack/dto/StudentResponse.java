@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class StudentResponse {
-
+    private Long id;
     private Long userId;
     private Long academyId;
     private LocalDate birthDate;
