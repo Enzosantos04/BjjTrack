@@ -2,12 +2,7 @@ package enzosdev.bjjtrack.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import enzosdev.bjjtrack.entity.Academy;
-import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.enums.Belt;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
