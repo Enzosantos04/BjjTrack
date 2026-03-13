@@ -19,5 +19,6 @@ public class StudentResponse {
     private Long userId;
     private Long academyId;
     private LocalDate birthDate;
+    private LocalDate lastPromotion;
     private Belt belt;
 }
