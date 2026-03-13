@@ -5,6 +5,7 @@ import enzosdev.bjjtrack.dto.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.enums.Belt;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.UserNotFoundException;
 import enzosdev.bjjtrack.mapper.StudentMapper;
@@ -34,6 +35,12 @@ public class StudentService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         Academy academy = academyRepository.findById(studentRequest.getAcademyId())
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
+
+        if (userRepository.existsUserById(studentRequest.getUserId())){
+            throw new RuntimeException("User already exists");
+
+        }
+
 
         Student student = studentMapper.toEntity(studentRequest, academy, user);
         student = studentRepository.save(student);
