@@ -33,6 +33,11 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate brithDate;
 
+    @Column(name = "last_promotion")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate lastPromotion;
+
+
     @Enumerated(EnumType.STRING)
     private Belt belt;
 
