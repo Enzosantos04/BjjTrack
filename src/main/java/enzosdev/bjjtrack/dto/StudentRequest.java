@@ -28,6 +28,7 @@ public class StudentRequest {
 
     private Belt belt;
 
-    private
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate lastPromotion;
 
 }
