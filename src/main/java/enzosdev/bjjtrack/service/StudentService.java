@@ -37,7 +37,7 @@ public class StudentService {
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
 
         if (studentRepository.existsStudentByUserId(studentRequest.getUserId())){
-            throw new RuntimeException("User already exists");
+            throw new RuntimeException("Student already exists");
 
         }
 
