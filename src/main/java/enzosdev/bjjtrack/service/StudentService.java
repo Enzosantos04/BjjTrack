@@ -36,10 +36,10 @@ public class StudentService {
         Academy academy = academyRepository.findById(studentRequest.getAcademyId())
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
 
-        if (userRepository.existsUserById(studentRequest.getUserId())){
-            throw new RuntimeException("User already exists");
-
-        }
+//        if (userRepository.existsUserById(studentRequest.getUserId())){
+//            throw new RuntimeException("User already exists");
+//
+//        }
 
 
         Student student = studentMapper.toEntity(studentRequest, academy, user);
