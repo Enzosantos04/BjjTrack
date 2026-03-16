@@ -16,7 +16,6 @@ public class StudentMapper {
         student.setUser(user);
         student.setBelt(studentRequest.getBelt());
         student.setBrithDate(studentRequest.getBirthDate());
-        student.setLastPromotion(studentRequest.getLastPromotion());
         return student;
 
 
@@ -34,7 +33,6 @@ public class StudentMapper {
         dto.setEmail(student.getUser().getEmail());
         dto.setBirthDate(student.getBrithDate());
         dto.setBelt(student.getBelt());
-        dto.setLastPromotion(student.getLastPromotion());
         if (student.getAcademy() != null){
             dto.setAcademyId(student.getAcademy().getId());
         }
