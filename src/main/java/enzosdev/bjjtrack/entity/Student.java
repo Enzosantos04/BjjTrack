@@ -37,6 +37,8 @@ public class Student {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate lastPromotion;
 
+    private Integer stripes;
+
 
     @Enumerated(EnumType.STRING)
     private Belt belt;
