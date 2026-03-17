@@ -109,4 +109,14 @@ public class ControllerExceptionHandler {
 
     }
 
+    @ExceptionHandler(StudentAlreadyExists.class)
+    public ResponseEntity<Map<String, String>> handleStudentAlreadyExistsException(StudentAlreadyExists ex) {
+        Map<String, String > response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "400");
+        response.put("Error: ", "Student already exists");
+        return  ResponseEntity.badRequest().body(response);
+
+    }
+
 }
