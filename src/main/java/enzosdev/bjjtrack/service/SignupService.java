@@ -1,9 +1,9 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.dto.AcademyResponse;
-import enzosdev.bjjtrack.dto.AdminResponse;
-import enzosdev.bjjtrack.dto.SignupRequest;
-import enzosdev.bjjtrack.dto.SignupResponse;
+import enzosdev.bjjtrack.dto.response.AcademyResponse;
+import enzosdev.bjjtrack.dto.response.AdminResponse;
+import enzosdev.bjjtrack.dto.request.SignupRequest;
+import enzosdev.bjjtrack.dto.response.SignupResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNameAlreadyExistsException;

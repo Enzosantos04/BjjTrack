@@ -1,4 +1,4 @@
-package enzosdev.bjjtrack.dto;
+package enzosdev.bjjtrack.dto.request;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

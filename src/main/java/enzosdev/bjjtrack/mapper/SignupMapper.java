@@ -1,8 +1,8 @@
 package enzosdev.bjjtrack.mapper;
 
-import enzosdev.bjjtrack.dto.AcademyResponse;
-import enzosdev.bjjtrack.dto.AdminResponse;
-import enzosdev.bjjtrack.dto.SignupResponse;
+import enzosdev.bjjtrack.dto.response.AcademyResponse;
+import enzosdev.bjjtrack.dto.response.AdminResponse;
+import enzosdev.bjjtrack.dto.response.SignupResponse;
 import org.springframework.stereotype.Component;
 
 @Component

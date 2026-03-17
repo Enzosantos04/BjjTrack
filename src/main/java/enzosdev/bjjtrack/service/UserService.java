@@ -1,6 +1,8 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.dto.*;
+import enzosdev.bjjtrack.dto.request.UserRequest;
+import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
+import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.*;

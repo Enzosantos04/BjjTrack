@@ -1,20 +1,15 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.dto.AcademyRequest;
-import enzosdev.bjjtrack.dto.AcademyResponse;
-import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
-import enzosdev.bjjtrack.dto.UserResponse;
+import enzosdev.bjjtrack.dto.response.AcademyResponse;
+import enzosdev.bjjtrack.dto.request.AcademyUpdateRequest;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
-import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
-import enzosdev.bjjtrack.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Optional;
 

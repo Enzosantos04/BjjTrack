@@ -1,6 +1,8 @@
 package enzosdev.bjjtrack.controller;
 
-import enzosdev.bjjtrack.dto.*;
+import enzosdev.bjjtrack.dto.request.UserRequest;
+import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
+import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

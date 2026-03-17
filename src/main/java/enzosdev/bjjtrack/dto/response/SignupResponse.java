@@ -1,4 +1,4 @@
-package enzosdev.bjjtrack.dto;
+package enzosdev.bjjtrack.dto.response;
 
 
 import lombok.AllArgsConstructor;

@@ -1,7 +1,6 @@
-package enzosdev.bjjtrack.dto;
+package enzosdev.bjjtrack.dto.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter

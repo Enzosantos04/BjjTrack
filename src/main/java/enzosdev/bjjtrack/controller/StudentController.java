@@ -1,7 +1,7 @@
 package enzosdev.bjjtrack.controller;
 
-import enzosdev.bjjtrack.dto.StudentRequest;
-import enzosdev.bjjtrack.dto.StudentResponse;
+import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

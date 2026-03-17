@@ -1,9 +1,9 @@
 package enzosdev.bjjtrack.controller;
 
 
-import enzosdev.bjjtrack.dto.AcademyResponse;
-import enzosdev.bjjtrack.dto.AcademyUpdateRequest;
-import enzosdev.bjjtrack.dto.UserResponse;
+import enzosdev.bjjtrack.dto.response.AcademyResponse;
+import enzosdev.bjjtrack.dto.request.AcademyUpdateRequest;
+import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.service.AcademyService;
 import enzosdev.bjjtrack.service.UserService;
 import jakarta.validation.Valid;

@@ -1,7 +1,7 @@
 package enzosdev.bjjtrack.mapper;
 
-import enzosdev.bjjtrack.dto.StudentRequest;
-import enzosdev.bjjtrack.dto.StudentResponse;
+import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;

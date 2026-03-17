@@ -1,13 +1,11 @@
 package enzosdev.bjjtrack.exceptions;
 
-import enzosdev.bjjtrack.dto.AcademyRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.sql.rowset.spi.SyncResolver;
 import java.util.HashMap;
 import java.util.Map;
 

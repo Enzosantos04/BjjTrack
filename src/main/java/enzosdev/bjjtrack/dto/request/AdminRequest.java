@@ -1,7 +1,6 @@
-package enzosdev.bjjtrack.dto;
+package enzosdev.bjjtrack.dto.request;
 
 
-import enzosdev.bjjtrack.entity.Academy;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -9,18 +8,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
-
-    @NotBlank(message = "User's name is required")
+public class AdminRequest {
+    @NotBlank(message = "Admin name is required")
     private String name;
-    @Email(message = "This Email is in wrong format")
     @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
     @NotBlank(message = "Password is required")
     private String password;
-    private Long academyId;
 }

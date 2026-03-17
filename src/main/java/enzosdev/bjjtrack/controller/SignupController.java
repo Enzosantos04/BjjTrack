@@ -1,8 +1,8 @@
 package enzosdev.bjjtrack.controller;
 
 
-import enzosdev.bjjtrack.dto.SignupRequest;
-import enzosdev.bjjtrack.dto.SignupResponse;
+import enzosdev.bjjtrack.dto.request.SignupRequest;
+import enzosdev.bjjtrack.dto.response.SignupResponse;
 import enzosdev.bjjtrack.service.SignupService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

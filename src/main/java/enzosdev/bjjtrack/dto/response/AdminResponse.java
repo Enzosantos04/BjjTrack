@@ -1,18 +1,17 @@
-package enzosdev.bjjtrack.dto;
+package enzosdev.bjjtrack.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class UserResponse {
+public class AdminResponse {
 
     private Long id;
     private String name;
     private String email;
-    private Long academyId;
 }

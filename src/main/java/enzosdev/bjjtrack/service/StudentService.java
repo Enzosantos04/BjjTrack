@@ -1,11 +1,12 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.dto.StudentRequest;
-import enzosdev.bjjtrack.dto.StudentResponse;
+import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
+import enzosdev.bjjtrack.exceptions.StudentAlreadyExists;
 import enzosdev.bjjtrack.exceptions.UserNotFoundException;
 import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
