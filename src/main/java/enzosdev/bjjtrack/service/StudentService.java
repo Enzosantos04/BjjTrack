@@ -6,7 +6,7 @@ import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
-import enzosdev.bjjtrack.exceptions.StudentAlreadyExists;
+import enzosdev.bjjtrack.exceptions.StudentAlreadyExistsException;
 import enzosdev.bjjtrack.exceptions.UserNotFoundException;
 import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
@@ -37,7 +37,7 @@ public class StudentService {
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
 
         if (studentRepository.existsStudentByUserId(studentRequest.getUserId())){
-            throw new StudentAlreadyExists("Student already exists");
+            throw new StudentAlreadyExistsException("Student already exists");
 
         }
 
