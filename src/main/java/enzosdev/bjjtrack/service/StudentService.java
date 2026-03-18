@@ -1,6 +1,8 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
@@ -45,6 +47,29 @@ public class StudentService {
         Student student = studentMapper.toEntity(studentRequest, academy, user);
         student = studentRepository.save(student);
         return studentMapper.toResponse(student);
+
+    }
+
+    public StudentPromotionResponse promoteStripe(Long id, StudentPromotionRequest promotionRequest){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        student.setLastPromotion(promotionRequest.getLastPromotion());
+        student.setBelt(student.getBelt());
+
+        int stripes = student.getStripes();
+        if (stripes < 0 || stripes > 4) {
+            throw new RuntimeException("Stripes must be between 0 and 4");
+
+        }
+
+        if (stripes >= 4){
+            throw new RuntimeException("Student already has maximum stripes");
+        }
+
+        student.setStripes(stripes + 1);
+
+        student = studentRepository.save(student);
+        return studentMapper.toPromotionResponse(student);
 
     }
 }
