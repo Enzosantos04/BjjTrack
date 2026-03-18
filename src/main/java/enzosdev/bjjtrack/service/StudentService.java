@@ -7,6 +7,7 @@ import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.enums.Belt;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.StudentAlreadyExistsException;
 import enzosdev.bjjtrack.exceptions.UserNotFoundException;
@@ -20,10 +21,10 @@ import org.springframework.stereotype.Service;
 public class StudentService {
 
 
-    private StudentRepository studentRepository;
-    private StudentMapper studentMapper;
-    private AcademyRepository academyRepository;
-    private UserRepository userRepository;
+    private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
+    private final AcademyRepository academyRepository;
+    private final UserRepository userRepository;
 
     public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, AcademyRepository academyRepository, UserRepository userRepository) {
         this.studentRepository = studentRepository;
@@ -67,6 +68,31 @@ public class StudentService {
         }
 
         student.setStripes(stripes + 1);
+
+        student = studentRepository.save(student);
+        return studentMapper.toPromotionResponse(student);
+
+    }
+
+    public StudentPromotionResponse promoteBelt(Long id, StudentPromotionRequest promotionRequest){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        int stripes = student.getStripes();
+        Enum<Belt> studentCurrentBelt = student.getBelt();
+
+        if(stripes < 3){
+            throw new RuntimeException("Student dont have minimum stripes quantity to be promoted");
+        }
+
+        student.setBelt(promotionRequest.getBelt());
+
+        if (studentCurrentBelt == promotionRequest.getBelt()){
+            throw new RuntimeException("Promote same color belt is not allowed");
+
+        }
+
+        student.setStripes(0);
 
         student = studentRepository.save(student);
         return studentMapper.toPromotionResponse(student);
