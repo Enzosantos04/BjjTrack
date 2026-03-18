@@ -28,8 +28,16 @@ public class StudentController {
     }
 
     @PatchMapping("/{id}/stripe")
-    ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
+   public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
         StudentPromotionResponse promotionResponse = studentService.promoteStripe(id, promotionRequest);
         return ResponseEntity.status(HttpStatus.OK).body(promotionResponse);
     }
+
+    @PatchMapping("/{id}/promote-belt")
+    public ResponseEntity<StudentPromotionResponse> promoteStudentBelt(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
+        StudentPromotionResponse studentResponse = studentService.promoteBelt(id, promotionRequest);
+        return ResponseEntity.ok(studentResponse);
+
+    }
+
 }
