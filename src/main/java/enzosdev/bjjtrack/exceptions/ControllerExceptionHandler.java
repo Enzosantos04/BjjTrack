@@ -117,4 +117,32 @@ public class ControllerExceptionHandler {
 
     }
 
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<Map<String, String >> handleStudentNotFoundException(StudentNotFoundException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "404");
+        response.put("error: ", "Student Not Found");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(StudentAlreadyHasMaxStripesException.class)
+    public ResponseEntity<Map<String, String >> handleStudentAlreadyHasMaxStripesException(StudentAlreadyHasMaxStripesException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "Student already has maximum stripes");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(InvalidStripesException.class)
+    public ResponseEntity<Map<String, String >> handleInvalidStripesException(InvalidStripesException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "Stripes must be between 0 and 4");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+
 }
