@@ -144,5 +144,24 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(InsufficientStripesForPromotionException.class)
+    public ResponseEntity<Map<String, String >> handleInsufficientStripesForPromotion(InsufficientStripesForPromotionException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "Student has insufficient stripes for promotion");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(SameBeltPromotionNotAllowedException.class)
+    public ResponseEntity<Map<String, String >> handleSameBeltPromotionNotAllowedException(SameBeltPromotionNotAllowedException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "Promoting to the same belt is not allowed");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+
 
 }
