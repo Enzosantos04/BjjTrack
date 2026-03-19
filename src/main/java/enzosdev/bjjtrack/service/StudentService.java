@@ -80,13 +80,13 @@ public class StudentService {
         Enum<Belt> studentCurrentBelt = student.getBelt();
 
         if(stripes < 3){
-            throw new RuntimeException("Student dont have minimum stripes quantity to be promoted");
+            throw new InsufficientStripesForPromotionException("Student dont have minimum stripes quantity to be promoted");
         }
 
         student.setBelt(promotionRequest.getBelt());
 
         if (studentCurrentBelt == promotionRequest.getBelt()){
-            throw new RuntimeException("Promote same color belt is not allowed");
+            throw new SameBeltPromotionNotAllowedException("Promoting to the same belt is not allowed");
 
         }
 
