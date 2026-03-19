@@ -8,9 +8,7 @@ import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.enums.Belt;
-import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
-import enzosdev.bjjtrack.exceptions.StudentAlreadyExistsException;
-import enzosdev.bjjtrack.exceptions.UserNotFoundException;
+import enzosdev.bjjtrack.exceptions.*;
 import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.StudentRepository;
@@ -53,18 +51,18 @@ public class StudentService {
 
     public StudentPromotionResponse promoteStripe(Long id, StudentPromotionRequest promotionRequest){
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
         student.setLastPromotion(promotionRequest.getLastPromotion());
         student.setBelt(student.getBelt());
 
         int stripes = student.getStripes();
         if (stripes < 0 || stripes > 4) {
-            throw new RuntimeException("Stripes must be between 0 and 4");
+            throw new InvalidStripesException("Stripes must be between 0 and 4");
 
         }
 
         if (stripes >= 4){
-            throw new RuntimeException("Student already has maximum stripes");
+            throw new StudentAlreadyHasMaxStripesException("Student already has maximum stripes");
         }
 
         student.setStripes(stripes + 1);
@@ -76,7 +74,7 @@ public class StudentService {
 
     public StudentPromotionResponse promoteBelt(Long id, StudentPromotionRequest promotionRequest){
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
         int stripes = student.getStripes();
         Enum<Belt> studentCurrentBelt = student.getBelt();
