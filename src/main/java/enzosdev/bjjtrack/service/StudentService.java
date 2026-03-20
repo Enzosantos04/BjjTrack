@@ -109,4 +109,12 @@ public class StudentService {
         return studentRepository.findStudentsByAcademyId(id, pageable)
                 .map(studentMapper::toResponse);
     }
+
+    public void deleteStudentById(Long id){
+        if(!studentRepository.existsById(id)) {
+            throw new StudentNotFoundException("Student not found");
+        }
+
+        studentRepository.deleteById(id);
+    }
 }
