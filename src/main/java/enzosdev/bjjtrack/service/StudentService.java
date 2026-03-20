@@ -97,7 +97,7 @@ public class StudentService {
 
 
     public Page<StudentResponse> findAllStudents(Pageable pageable){
-        return studentRepository.findAll(pageable)
+        return studentRepository.findAllStudentsByUserActiveTrue(pageable)
                 .map(studentMapper::toResponse);
     }
 
