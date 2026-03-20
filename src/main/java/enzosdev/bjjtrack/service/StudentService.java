@@ -13,6 +13,8 @@ import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.StudentRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -91,5 +93,11 @@ public class StudentService {
         student = studentRepository.save(student);
         return studentMapper.toPromotionResponse(student);
 
+    }
+
+
+    public Page<StudentResponse> findAllStudents(Pageable pageable){
+        return studentRepository.findAll(pageable)
+                .map(studentMapper::toResponse);
     }
 }
