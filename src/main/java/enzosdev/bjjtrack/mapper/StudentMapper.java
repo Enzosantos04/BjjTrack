@@ -37,11 +37,6 @@ public class StudentMapper {
         if (student.getAcademy() != null){
             dto.setAcademyId(student.getAcademy().getId());
         }
-
-        if (student.getUser() != null){
-            dto.setUserId(student.getUser().getId());
-        }
-
         return dto;
 
     }
