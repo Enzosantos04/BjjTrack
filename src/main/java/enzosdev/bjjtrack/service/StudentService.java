@@ -100,4 +100,13 @@ public class StudentService {
         return studentRepository.findAll(pageable)
                 .map(studentMapper::toResponse);
     }
+
+    public Page<StudentResponse> findStudentsByAcademyId(Long id, Pageable pageable){
+        if (!academyRepository.existsById(id)){
+            throw new AcademyNotFoundException("Academy not found.");
+        }
+
+        return studentRepository.findStudentsByAcademyId(id, pageable)
+                .map(studentMapper::toResponse);
+    }
 }
