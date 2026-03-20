@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsStudentByUserId(Long userId);
     Page<Student> findStudentsByAcademyId(Long academyId, Pageable pageable);
+    Page<Student> findAllByUserActiveTrue(Pageable pageable);
 }
