@@ -5,7 +5,10 @@ public enum Belt {
     BLUE("Blue"),
     PURPLE("Purple"),
     BROWN("Brown"),
-    BLACK("Black");
+    BLACK("Black"),
+    CORAL("Coral"),
+    RED_WHITE("Red White"),
+    RED("Red");
 
 
     private final String label;
