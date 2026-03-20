@@ -49,4 +49,11 @@ public class StudentController {
        return ResponseEntity.ok(studentResponse);
     }
 
+    @GetMapping("/academy/{id}")
+    public ResponseEntity<Page<StudentResponse>> findStudentsByAcademyId(@PathVariable Long id, Pageable pageable){
+        Page<StudentResponse> studentResponses = studentService.findStudentsByAcademyId(id, pageable);
+        return ResponseEntity.ok(studentResponses);
+
+    }
+
 }
