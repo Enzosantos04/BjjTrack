@@ -56,10 +56,6 @@ public class StudentService {
         student.setBelt(student.getBelt());
 
         int stripes = student.getStripes();
-        if (stripes < 0 || stripes > 4) {
-            throw new InvalidStripesException("Stripes must be between 0 and 4");
-
-        }
 
         if (stripes >= 4){
             throw new StudentAlreadyHasMaxStripesException("Student already has maximum stripes");
