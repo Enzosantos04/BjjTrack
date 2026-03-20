@@ -17,6 +17,7 @@ public class StudentMapper {
         student.setUser(user);
         student.setBelt(studentRequest.getBelt());
         student.setBrithDate(studentRequest.getBirthDate());
+        student.setStripes(0);
         return student;
 
 
