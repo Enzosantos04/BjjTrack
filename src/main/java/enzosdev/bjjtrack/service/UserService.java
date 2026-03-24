@@ -1,8 +1,11 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.config.PasswordEncoderConfig;
 import enzosdev.bjjtrack.dto.request.UserRequest;
+import enzosdev.bjjtrack.dto.request.UserUpdateEmailRequest;
 import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
 import enzosdev.bjjtrack.dto.response.UserResponse;
+import enzosdev.bjjtrack.dto.response.UserUpdateEmailResponse;
 import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
@@ -23,12 +26,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoderConfig passwordEncoderConfig;
     private final AcademyRepository academyRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AcademyRepository academyRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, PasswordEncoderConfig isPasswordValid, AcademyRepository academyRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.passwordEncoderConfig = isPasswordValid;
         this.academyRepository = academyRepository;
     }
 
