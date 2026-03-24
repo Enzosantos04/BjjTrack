@@ -1,7 +1,9 @@
 package enzosdev.bjjtrack.mapper;
 
 import enzosdev.bjjtrack.dto.request.UserRequest;
+import enzosdev.bjjtrack.dto.request.UserUpdateEmailRequest;
 import enzosdev.bjjtrack.dto.response.UserResponse;
+import enzosdev.bjjtrack.dto.response.UserUpdateEmailResponse;
 import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
@@ -50,5 +52,16 @@ public class UserMapper {
         }
         return dto;
 
+    }
+
+    public UserUpdateEmailResponse toUpdateEmailResponse(User user){
+        if (user == null){
+            return null;
+        }
+
+        UserUpdateEmailResponse response = new UserUpdateEmailResponse();
+        response.setId(user.getId());
+        response.setNewEmail(user.getEmail());
+        return response;
     }
 }
