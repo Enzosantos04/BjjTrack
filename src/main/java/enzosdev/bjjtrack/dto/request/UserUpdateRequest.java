@@ -12,8 +12,6 @@ import lombok.*;
 public class UserUpdateRequest {
 
     private String name;
-    @Email(message = "This Email is in wrong format")
-    private String email;
     private Academy academy;
     private Long academyId;
 }
