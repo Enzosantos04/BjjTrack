@@ -77,7 +77,7 @@ public class StudentService {
         int stripes = student.getStripes();
         Enum<Belt> studentCurrentBelt = student.getBelt();
 
-        if(stripes < 3){
+        if(stripes < 4){
             throw new InsufficientStripesForPromotionException("Student dont have minimum stripes quantity to be promoted");
         }
 
