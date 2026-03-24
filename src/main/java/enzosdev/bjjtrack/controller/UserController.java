@@ -1,8 +1,10 @@
 package enzosdev.bjjtrack.controller;
 
 import enzosdev.bjjtrack.dto.request.UserRequest;
+import enzosdev.bjjtrack.dto.request.UserUpdateEmailRequest;
 import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
 import enzosdev.bjjtrack.dto.response.UserResponse;
+import enzosdev.bjjtrack.dto.response.UserUpdateEmailResponse;
 import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.service.UserService;
 import jakarta.validation.Valid;
@@ -71,6 +73,13 @@ public class UserController {
     public ResponseEntity<?> activateUserById(@PathVariable Long id){
         userService.activateUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{id}/update-email")
+    public ResponseEntity<UserUpdateEmailResponse> updateEmail(@PathVariable Long id,@Valid  @RequestBody UserUpdateEmailRequest request){
+        UserUpdateEmailResponse response = userService.updateEmailById(id, request);
+        return ResponseEntity.ok(response);
     }
 
 }
