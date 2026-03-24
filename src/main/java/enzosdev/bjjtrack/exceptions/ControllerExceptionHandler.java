@@ -163,5 +163,24 @@ public class ControllerExceptionHandler {
     }
 
 
+    @ExceptionHandler(EmailMustBeDifferentException.class)
+    public ResponseEntity<Map<String, String >> handleEmailMustBeDifferentException(EmailMustBeDifferentException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "New email must not be equal to the old email");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<Map<String, String >> handleInvalidPasswordException(InvalidPasswordException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status ", "400");
+        response.put("error: ", "Password is invalid");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+
 
 }
