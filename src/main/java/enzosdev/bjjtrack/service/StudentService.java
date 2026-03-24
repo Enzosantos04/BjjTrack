@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class StudentService {
 
@@ -81,13 +83,14 @@ public class StudentService {
             throw new InsufficientStripesForPromotionException("Student dont have minimum stripes quantity to be promoted");
         }
 
-        student.setBelt(promotionRequest.getBelt());
+
 
         if (studentCurrentBelt == promotionRequest.getBelt()){
             throw new SameBeltPromotionNotAllowedException("Promoting to the same belt is not allowed");
 
         }
 
+        student.setBelt(promotionRequest.getBelt());
         student.setStripes(0);
 
         student = studentRepository.save(student);
@@ -116,5 +119,12 @@ public class StudentService {
         }
 
         studentRepository.deleteById(id);
+    }
+
+
+    public StudentResponse findStudentById(Long id){
+        Optional<Student> student = studentRepository.findById(id);
+        return student.map(studentMapper::toResponse)
+                .orElseThrow(() -> new StudentNotFoundException("Student not Found"));
     }
 }
