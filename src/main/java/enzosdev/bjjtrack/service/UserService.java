@@ -26,14 +26,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordEncoderConfig passwordEncoderConfig;
     private final AcademyRepository academyRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, PasswordEncoderConfig isPasswordValid, AcademyRepository academyRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AcademyRepository academyRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.passwordEncoderConfig = isPasswordValid;
         this.academyRepository = academyRepository;
     }
 
@@ -129,5 +127,39 @@ public class UserService {
         userMapper.toResponse(activatedUser);
     }
 
+
+
+     public UserUpdateEmailResponse updateEmailById(Long id, UserUpdateEmailRequest request) {
+         User user = userRepository.findById(id)
+                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+         String email = user.getEmail();
+         if(request.getNewEmail().isBlank()){
+             throw new EmptyFieldException("empty field is not allowed");
+         }
+         if (request.getNewEmail().equals(email)) {
+             throw new EmailMustBeDifferentException("New email must not be equal to the old email");
+         }
+
+         if(userRepository.existsByAcademyIdAndEmailIgnoreCase(user.getAcademy().getId(), request.getNewEmail())){
+             throw new UserEmailAlreadyExistsException("Email already Exists");
+         }
+
+
+         String password = user.getPassword();
+         if (!isPasswordValid(request.getPassword(), password)) {
+          throw  new InvalidPasswordException("Password is invalid");
+
+         }
+
+         user.setEmail(request.getNewEmail());
+
+         User savedUser = userRepository.save(user);
+         return userMapper.toUpdateEmailResponse(savedUser);
+     }
+
+    private boolean isPasswordValid(String password,String  hashedPassword){
+        return passwordEncoder.matches(password, hashedPassword);
+    }
 
 }
