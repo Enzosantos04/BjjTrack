@@ -55,17 +55,7 @@ public class UserService {
             user.setName(userUpdateRequest.getName());
         }
 
-        if(userUpdateRequest.getEmail() != null){
-            if(userUpdateRequest.getEmail().isBlank()){
-                throw new EmptyFieldException("User email empty is not allowed");
-            }
-            Long academyId = user.getAcademy().getId();
 
-            if(userRepository.existsByAcademyIdAndEmailIgnoreCaseAndIdNot(academyId, userUpdateRequest.getEmail(), user.getId())){
-                throw new UserEmailAlreadyExistsException("This email is already in use.");
-            }
-            user.setEmail(userUpdateRequest.getEmail());
-        }
         User updatedUser = userRepository.save(user);
         return userMapper.toResponse(updatedUser);
 
