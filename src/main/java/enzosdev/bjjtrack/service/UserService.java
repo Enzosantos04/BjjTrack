@@ -3,6 +3,7 @@ package enzosdev.bjjtrack.service;
 import enzosdev.bjjtrack.dto.request.UserRequest;
 import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
 import enzosdev.bjjtrack.dto.response.UserResponse;
+import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.exceptions.*;
@@ -44,7 +45,7 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
-    public UserResponse UpdateUserById(Long id, UserUpdateRequest userUpdateRequest){
+    public UserUpdateResponse UpdateUserById(Long id, UserUpdateRequest userUpdateRequest){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
 
@@ -57,7 +58,7 @@ public class UserService {
 
 
         User updatedUser = userRepository.save(user);
-        return userMapper.toResponse(updatedUser);
+        return userMapper.toUpdateResponse(updatedUser);
 
     }
 
