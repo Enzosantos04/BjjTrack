@@ -4,6 +4,7 @@ import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
+import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -60,6 +61,19 @@ public class StudentController {
     public ResponseEntity<?> deleteStudentById(@PathVariable Long id){
         studentService.deleteStudentById(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping(params = {"email"})
+    public ResponseEntity<StudentResponse> findStudentByEmail(@RequestParam String email){
+        StudentResponse studentResponse = studentService.findStudentByEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id){
+        StudentResponse studentResponse = studentService.findStudentById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
     }
 
 
