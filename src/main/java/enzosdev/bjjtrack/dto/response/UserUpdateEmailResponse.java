@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class UpdateUserEmailResponse {
+public class UserUpdateEmailResponse {
+    private Long id;
     private String  newEmail;
 }
