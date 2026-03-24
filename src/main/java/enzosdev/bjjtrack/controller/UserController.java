@@ -3,6 +3,7 @@ package enzosdev.bjjtrack.controller;
 import enzosdev.bjjtrack.dto.request.UserRequest;
 import enzosdev.bjjtrack.dto.request.UserUpdateRequest;
 import enzosdev.bjjtrack.dto.response.UserResponse;
+import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -29,8 +30,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
-        UserResponse user = userService.UpdateUserById(id, userUpdateRequest);
+    public ResponseEntity<UserUpdateResponse> updateUserById(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
+        UserUpdateResponse user = userService.UpdateUserById(id, userUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
