@@ -127,4 +127,10 @@ public class StudentService {
         return student.map(studentMapper::toResponse)
                 .orElseThrow(() -> new StudentNotFoundException("Student not Found"));
     }
+
+    public StudentResponse findStudentByEmail(String email){
+        Optional<Student> student = studentRepository.findStudentByUserEmail(email);
+        return student.map(studentMapper::toResponse)
+                .orElseThrow(() -> new UserNotFoundException("User not Found"));
+    }
 }
