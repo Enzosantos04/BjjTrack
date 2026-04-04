@@ -1,10 +1,11 @@
 package enzosdev.bjjtrack.controller;
 
+import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentProfileUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
-import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -74,6 +75,13 @@ public class StudentController {
     public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id){
         StudentResponse studentResponse = studentService.findStudentById(id);
         return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
+    }
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(@PathVariable Long id, @Valid @RequestBody StudentProfileUpdateRequest request){
+        StudentProfileUpdateResponse response = studentService.updateOwnProfileById(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
