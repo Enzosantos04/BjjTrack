@@ -15,16 +15,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StudentUpdateRequest {
-
-
-
+public class StudentProfileUpdateRequest {
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
-
-    @NotNull(message = "Belt is required")
-    private Belt belt;
-    private Integer stripes;
 }
