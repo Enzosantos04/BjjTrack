@@ -1,7 +1,9 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentProfileUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
@@ -132,5 +134,20 @@ public class StudentService {
         Optional<Student> student = studentRepository.findStudentByUserEmail(email);
         return student.map(studentMapper::toResponse)
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
+    }
+
+    public StudentProfileUpdateResponse updateOwnProfileById(Long id, StudentProfileUpdateRequest request){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        if(request.getBirthDate() == null){
+            throw new RuntimeException("Birth date is required");
+        }
+
+        student.setBrithDate(request.getBirthDate());
+
+        student = studentRepository.save(student);
+
+        return studentMapper.toProfileUpdateResponse(student);
     }
 }
