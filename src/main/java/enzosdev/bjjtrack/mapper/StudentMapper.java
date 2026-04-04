@@ -1,6 +1,7 @@
 package enzosdev.bjjtrack.mapper;
 
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentProfileUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
 import enzosdev.bjjtrack.entity.Academy;
@@ -48,6 +49,13 @@ public class StudentMapper {
         response.setStripes(student.getStripes());
         response.setLastPromotion(student.getLastPromotion());
         response.setBelt(student.getBelt());
+        return response;
+    }
+
+
+    public StudentProfileUpdateResponse toProfileUpdateResponse(Student student) {
+        StudentProfileUpdateResponse response = new StudentProfileUpdateResponse();
+        response.setBirthDate(student.getBrithDate());
         return response;
     }
 
