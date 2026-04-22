@@ -15,10 +15,11 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("Status: ", "400");
-        errorResponse.put("error: ", "Empty fields are not allowed, try again");
-        return ResponseEntity.badRequest().body(errorResponse);
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+        return ResponseEntity.badRequest().body(errors);
     }
 
 
