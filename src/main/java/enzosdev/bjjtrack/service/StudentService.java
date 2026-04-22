@@ -1,8 +1,10 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.dto.request.StudentAdminUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentAdminUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentProfileUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
@@ -149,5 +151,24 @@ public class StudentService {
         student = studentRepository.save(student);
 
         return studentMapper.toProfileUpdateResponse(student);
+    }
+
+
+    public StudentAdminUpdateResponse updateStudentAdminById(Long id, StudentAdminUpdateRequest request){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        if(request.getBelt() == null){
+            throw new RuntimeException("Belt is required");
+        }
+
+        if(request.getStripe() > 4 || request.getStripe() < 0){
+            throw new InvalidStripesException("Stripe must be between 0 and 4");
+        }
+
+        student.setBelt(request.getBelt());
+        student.setStripes(request.getStripe());
+        student = studentRepository.save(student);
+        return studentMapper.toAdminUpdateResponse(student);
     }
 }
