@@ -1,8 +1,10 @@
 package enzosdev.bjjtrack.controller;
 
+import enzosdev.bjjtrack.dto.request.StudentAdminUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
 import enzosdev.bjjtrack.dto.request.StudentRequest;
+import enzosdev.bjjtrack.dto.response.StudentAdminUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentProfileUpdateResponse;
 import enzosdev.bjjtrack.dto.response.StudentPromotionResponse;
 import enzosdev.bjjtrack.dto.response.StudentResponse;
@@ -78,9 +80,15 @@ public class StudentController {
     }
 
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/me")
     public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(@PathVariable Long id, @Valid @RequestBody StudentProfileUpdateRequest request){
         StudentProfileUpdateResponse response = studentService.updateOwnProfileById(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PatchMapping("/{id}/admin")
+    public ResponseEntity<StudentAdminUpdateResponse> updateAdminStudentProfile(@PathVariable Long id, @Valid @RequestBody StudentAdminUpdateRequest request){
+        StudentAdminUpdateResponse response = studentService.updateStudentAdminById(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
