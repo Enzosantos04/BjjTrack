@@ -143,7 +143,7 @@ public class StudentService {
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
         if(request.getBirthDate() == null){
-            throw new RuntimeException("Birth date is required");
+            throw new EmptyFieldException("Birth date is required");
         }
 
         student.setBrithDate(request.getBirthDate());
@@ -159,7 +159,7 @@ public class StudentService {
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
         if(request.getBelt() == null){
-            throw new RuntimeException("Belt is required");
+            throw new EmptyFieldException("Belt is required");
         }
 
         if(request.getStripe() > 4 || request.getStripe() < 0){
