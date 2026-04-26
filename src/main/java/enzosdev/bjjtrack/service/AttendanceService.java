@@ -39,4 +39,11 @@ public class AttendanceService {
 
     }
 
+    public void deleteAttendance(Long id) {
+        if (!attendanceRepository.existsById(id)) {
+            throw new RuntimeException("Attendance not found");
+        }
+        attendanceRepository.deleteById(id);
+    }
+
 }
