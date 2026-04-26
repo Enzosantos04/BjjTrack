@@ -182,6 +182,22 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(AttendanceAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleAttendanceAlreadyExistsException(AttendanceAlreadyExistsException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "400");
+        response.put("error: ", "Attendance already exists for this date");
+        return ResponseEntity.badRequest().body(response);
+    }
 
+    @ExceptionHandler(AttendanceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleAttendanceNotFoundException(AttendanceNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "404");
+        response.put("error: ", "Attendance Not Found");
+        return ResponseEntity.badRequest().body(response);
+    }
 
 }
