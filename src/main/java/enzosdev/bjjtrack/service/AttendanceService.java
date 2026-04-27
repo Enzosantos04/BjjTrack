@@ -1,17 +1,21 @@
 package enzosdev.bjjtrack.service;
 
-
 import enzosdev.bjjtrack.dto.request.AttendanceRequest;
 import enzosdev.bjjtrack.dto.response.AttendanceResponse;
 import enzosdev.bjjtrack.entity.Attendance;
 import enzosdev.bjjtrack.entity.Student;
+import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.AttendanceAlreadyExistsException;
 import enzosdev.bjjtrack.exceptions.AttendanceNotFoundException;
 import enzosdev.bjjtrack.exceptions.StudentNotFoundException;
 import enzosdev.bjjtrack.mapper.AttendanceMapper;
+import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.AttendanceRepository;
 import enzosdev.bjjtrack.repository.StudentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AttendanceService {
@@ -19,12 +23,13 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final AttendanceMapper attendanceMapper;
     private final StudentRepository studentRepository;
+    private final AcademyRepository academyRepository;
 
-
-    public AttendanceService(AttendanceRepository attendanceRepository, AttendanceMapper attendanceMapper, StudentRepository studentRepository) {
+    public AttendanceService(AttendanceRepository attendanceRepository, AttendanceMapper attendanceMapper, StudentRepository studentRepository, AcademyRepository academyRepository) {
         this.attendanceRepository = attendanceRepository;
         this.attendanceMapper = attendanceMapper;
         this.studentRepository = studentRepository;
+        this.academyRepository = academyRepository;
     }
 
     public AttendanceResponse createAttendance(AttendanceRequest attendanceRequest) {
@@ -45,6 +50,14 @@ public class AttendanceService {
             throw new AttendanceNotFoundException("Attendance with id " + id + " not found");
         }
         attendanceRepository.deleteById(id);
+    }
+
+    public Page<AttendanceResponse> findAttendancesByAcademyId (Long academyId, Pageable pageable) {
+        if(!academyRepository.existsById(academyId)){
+            throw  new AcademyNotFoundException("Academy not found.");
+        }
+       return attendanceRepository.findByStudentAcademyId(academyId, pageable)
+               .map(attendanceMapper::toResponse);
     }
 
 }
