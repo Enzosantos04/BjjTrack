@@ -60,4 +60,22 @@ public class AttendanceService {
                .map(attendanceMapper::toResponse);
     }
 
+    public AttendanceResponse updateAttendanceById(Long id, AttendanceRequest attendanceRequest) {
+        Attendance attendance = attendanceRepository.findById(id)
+                .orElseThrow(() -> new AttendanceNotFoundException("Attendance with id " + id + " not found"));
+
+        Student student = studentRepository.findById(attendanceRequest.getStudentId())
+                .orElseThrow(() -> new StudentNotFoundException("Student with id " + attendanceRequest.getStudentId() + " not found"));
+
+        if (attendanceRepository.existsByStudentIdAndAttendanceDate(attendanceRequest.getStudentId(), attendanceRequest.getAttendanceDate())) {
+            throw new AttendanceAlreadyExistsException("Attendance already registered for this date");
+        }
+
+        attendance.setStudent(student);
+        attendance.setAttendanceDate(attendanceRequest.getAttendanceDate());
+        attendanceRepository.save(attendance);
+        return attendanceMapper.toResponse(attendance);
+
+    }
+
 }
