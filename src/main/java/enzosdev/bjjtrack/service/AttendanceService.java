@@ -90,4 +90,12 @@ public class AttendanceService {
                .orElseThrow(() -> new AttendanceNotFoundException("Attendance with id " + id + " not found"));
     }
 
+    public Page<AttendanceResponse> findAttendanceByStudentId(Long studentId, Pageable pageable) {
+        if(!studentRepository.existsById(studentId)){
+            throw  new StudentNotFoundException("Student with id " + studentId + " not found");
+        }
+        return attendanceRepository.findByStudentId(studentId, pageable)
+                .map(attendanceMapper::toResponse);
+    }
+
 }
