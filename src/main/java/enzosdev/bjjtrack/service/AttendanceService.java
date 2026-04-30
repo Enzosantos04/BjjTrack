@@ -78,4 +78,9 @@ public class AttendanceService {
 
     }
 
+    public Page<AttendanceResponse> findAllAttendances( Pageable pageable) {
+        return attendanceRepository.findAll(pageable)
+                .map(attendanceMapper::toResponse);
+    }
+
 }
