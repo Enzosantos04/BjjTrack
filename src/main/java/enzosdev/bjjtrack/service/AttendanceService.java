@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class AttendanceService {
 
@@ -81,6 +83,12 @@ public class AttendanceService {
     public Page<AttendanceResponse> findAllAttendances( Pageable pageable) {
         return attendanceRepository.findAll(pageable)
                 .map(attendanceMapper::toResponse);
+    }
+
+    public AttendanceResponse findAttendanceById(Long id) {
+        Optional<Attendance> attendance = attendanceRepository.findById(id);
+       return attendance.map(attendanceMapper::toResponse)
+               .orElseThrow(() -> new AttendanceNotFoundException("Attendance with id " + id + " not found"));
     }
 
 }
