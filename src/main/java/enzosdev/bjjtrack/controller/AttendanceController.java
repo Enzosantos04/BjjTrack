@@ -26,6 +26,12 @@ public class AttendanceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<AttendanceResponse>> findAllAttendances(Pageable pageable) {
+        Page<AttendanceResponse> response = attendanceService.findAllAttendances(pageable);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/academy/{id}")
     public ResponseEntity<Page<AttendanceResponse>> findAttendancesByAcademyId(@PathVariable Long id, Pageable pageable) {
         Page<AttendanceResponse> response = attendanceService.findAttendancesByAcademyId(id, pageable);
