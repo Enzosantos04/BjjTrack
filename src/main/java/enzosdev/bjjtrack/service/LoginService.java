@@ -5,6 +5,7 @@ import enzosdev.bjjtrack.dto.request.LoginRequest;
 import enzosdev.bjjtrack.dto.response.LoginResponse;
 import enzosdev.bjjtrack.entity.Scope;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.exceptions.InvalidEmailOrPasswordException;
 import enzosdev.bjjtrack.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -32,10 +33,10 @@ public class LoginService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userRepository.findByEmailIgnoreCaseAndAcademyId(loginRequest.getEmail(), loginRequest.getAcademyId())
-                .orElseThrow(()-> new RuntimeException("Invalid email or password"));
+                .orElseThrow(()-> new InvalidEmailOrPasswordException("Invalid email or password"));
 
-        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+        if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new InvalidEmailOrPasswordException("Invalid email or password");
         }
 
         List<String> scopes = user.getScopes().stream()
