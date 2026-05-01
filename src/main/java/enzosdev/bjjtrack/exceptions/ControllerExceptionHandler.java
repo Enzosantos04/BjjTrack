@@ -200,4 +200,13 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(InvalidEmailOrPasswordException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmailOrPasswordException(InvalidEmailOrPasswordException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "401");
+        response.put("error: ", "Invalid email or password");
+        return ResponseEntity.status(401).body(response);
+    }
+
 }
