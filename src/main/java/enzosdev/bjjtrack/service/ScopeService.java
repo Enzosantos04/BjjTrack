@@ -18,4 +18,10 @@ public class ScopeService {
         return scopeRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Scope with id " + id + " not found"));
     }
+
+
+    public Scope findByName(String name) {
+        return scopeRepository.findByName(name).orElseThrow(
+                () -> new RuntimeException("Scope with name " + name + " not found"));
+    }
 }
