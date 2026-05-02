@@ -209,4 +209,22 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(401).body(response);
     }
 
+    @ExceptionHandler(ScopeNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleScopeNotFoundException(ScopeNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "404");
+        response.put("error: ", "Scope Not Found");
+        return ResponseEntity.status(404).body(response);
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorizedAccessException(UnauthorizedAccessException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("Message: ", ex.getMessage());
+        response.put("Status: ", "403");
+        response.put("error: ", "Unauthorized Access");
+        return ResponseEntity.status(403).body(response);
+    }
+
 }
