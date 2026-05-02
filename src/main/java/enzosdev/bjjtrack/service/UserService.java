@@ -8,16 +8,21 @@ import enzosdev.bjjtrack.dto.response.UserResponse;
 import enzosdev.bjjtrack.dto.response.UserUpdateEmailResponse;
 import enzosdev.bjjtrack.dto.response.UserUpdateResponse;
 import enzosdev.bjjtrack.entity.Academy;
+import enzosdev.bjjtrack.entity.Scope;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.enums.ScopeName;
 import enzosdev.bjjtrack.exceptions.*;
 import enzosdev.bjjtrack.mapper.UserMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
+import enzosdev.bjjtrack.repository.ScopeRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,12 +32,14 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AcademyRepository academyRepository;
+    private final ScopeRepository scopeRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AcademyRepository academyRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AcademyRepository academyRepository, ScopeRepository scopeRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.academyRepository = academyRepository;
+        this.scopeRepository = scopeRepository;
     }
 
     public UserResponse createUser(UserRequest userRequest){
@@ -42,8 +49,15 @@ public class UserService {
      }
         Academy academy = academyRepository.findById(userRequest.getAcademyId())
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
+
+        List<Scope> scopes = userRequest.getScopes().stream()
+                .map(scopeName -> scopeRepository.findByName(scopeName.getValue()).orElseThrow(
+                        () -> new RuntimeException("Scope not found")
+                )).toList();
+
         String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
         User user = userMapper.toUserEntity(userRequest, academy, hashedPassword);
+        user.setScopes(scopes);
         user = userRepository.save(user);
         return userMapper.toResponse(user);
     }
