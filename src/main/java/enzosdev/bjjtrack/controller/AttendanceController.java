@@ -21,13 +21,13 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_plataform:admin', 'SCOPE_attendance:write')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_attendance:write')")
     @PostMapping
     public ResponseEntity<AttendanceResponse> createAttendance(@Valid @RequestBody AttendanceRequest attendanceRequest) {
         AttendanceResponse response = attendanceService.createAttendance(attendanceRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_attendance:read')")
     @GetMapping
     public ResponseEntity<Page<AttendanceResponse>> findAllAttendances(Pageable pageable) {
         Page<AttendanceResponse> response = attendanceService.findAllAttendances(pageable);
