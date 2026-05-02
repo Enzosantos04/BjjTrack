@@ -1,12 +1,16 @@
 package enzosdev.bjjtrack.dto.request;
 
 
+import enzosdev.bjjtrack.enums.ScopeName;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +26,7 @@ public class UserRequest {
     @NotBlank(message = "Password is required")
     private String password;
     private Long academyId;
+
+    private List<ScopeName> scopes = new ArrayList<>();
+
 }
