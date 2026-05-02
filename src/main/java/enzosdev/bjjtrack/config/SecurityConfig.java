@@ -32,7 +32,7 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
-    //pega as chaves pelo application.yaml
+
     @Value("${jwt.public.key}")
     private RSAPublicKey rsaPublicKey;
 
@@ -59,7 +59,7 @@ public class SecurityConfig {
 
 
     @Bean
-    //assina o token
+
     public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(this.rsaPublicKey).privateKey(this.rsaPrivateKey).build();
         ImmutableJWKSet<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
@@ -68,7 +68,7 @@ public class SecurityConfig {
 
 
     @Bean
-    //acessa o token
+
     JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(this.rsaPublicKey).build();
     }
