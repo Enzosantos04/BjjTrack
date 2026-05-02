@@ -5,18 +5,24 @@ import enzosdev.bjjtrack.dto.response.AdminResponse;
 import enzosdev.bjjtrack.dto.request.SignupRequest;
 import enzosdev.bjjtrack.dto.response.SignupResponse;
 import enzosdev.bjjtrack.entity.Academy;
+import enzosdev.bjjtrack.entity.Scope;
 import enzosdev.bjjtrack.entity.User;
+import enzosdev.bjjtrack.enums.ScopeName;
 import enzosdev.bjjtrack.exceptions.AcademyNameAlreadyExistsException;
 import enzosdev.bjjtrack.exceptions.AcademySlugAlreadyExistsException;
+import enzosdev.bjjtrack.exceptions.ScopeNotFoundException;
 import enzosdev.bjjtrack.exceptions.UserEmailAlreadyExistsException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.mapper.SignupMapper;
 import enzosdev.bjjtrack.mapper.AdminMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
+import enzosdev.bjjtrack.repository.ScopeRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class SignupService {
@@ -27,14 +33,16 @@ public class SignupService {
     private final AdminMapper adminMapper;
     private final AcademyMapper academyMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ScopeRepository scopeRepository;
 
-    public SignupService(AcademyRepository academyRepository, UserRepository userRepository, SignupMapper signupMapper, AdminMapper adminMapper, AcademyMapper academyMapper, PasswordEncoder passwordEncoder) {
+    public SignupService(AcademyRepository academyRepository, UserRepository userRepository, SignupMapper signupMapper, AdminMapper adminMapper, AcademyMapper academyMapper, PasswordEncoder passwordEncoder, ScopeRepository scopeRepository) {
         this.academyRepository = academyRepository;
         this.userRepository = userRepository;
         this.signupMapper = signupMapper;
         this.adminMapper = adminMapper;
         this.academyMapper = academyMapper;
         this.passwordEncoder = passwordEncoder;
+        this.scopeRepository = scopeRepository;
     }
 
 
@@ -56,7 +64,12 @@ public class SignupService {
         Academy academy = academyMapper.toEntity(request.getAcademy());
         academy = academyRepository.save(academy);
         String hashedPassword = passwordEncoder.encode(request.getAdmin().getPassword());
+        Scope scope = scopeRepository.findByName(ScopeName.ADMIN_ALL.getValue()).orElseThrow(
+                () -> new ScopeNotFoundException("Scope with name " + ScopeName.ADMIN_ALL.getValue() + " not found")
+        );
+
         User admin = adminMapper.toAdminEntity(request.getAdmin(), academy, hashedPassword);
+        admin.getScopes().add(scope);
         admin = userRepository.save(admin);
         AcademyResponse academyResponse = academyMapper.toResponse(academy);
         AdminResponse adminResponse = adminMapper.toResponse(admin);
