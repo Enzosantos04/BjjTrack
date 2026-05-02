@@ -52,8 +52,12 @@ public class UserService {
 
         List<Scope> scopes = userRequest.getScopes().stream()
                 .map(scopeName -> scopeRepository.findByName(scopeName.getValue()).orElseThrow(
-                        () -> new RuntimeException("Scope not found")
+                        () -> new ScopeNotFoundException("Scope not found")
                 )).toList();
+
+        if (userRequest.getScopes().contains(ScopeName.PLATFORM_ADMIN)){
+            throw new UnauthorizedAccessException("Unauthorized access");
+        }
 
         String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
         User user = userMapper.toUserEntity(userRequest, academy, hashedPassword);
