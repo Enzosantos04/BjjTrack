@@ -50,7 +50,6 @@ public class StudentService {
 
         }
 
-
         Student student = studentMapper.toEntity(studentRequest, academy, user);
         student = studentRepository.save(student);
         return studentMapper.toResponse(student);
