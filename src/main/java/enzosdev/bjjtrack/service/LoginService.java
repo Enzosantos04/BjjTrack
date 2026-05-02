@@ -35,7 +35,7 @@ public class LoginService {
         User user = userRepository.findByEmailIgnoreCaseAndAcademyId(loginRequest.getEmail(), loginRequest.getAcademyId())
                 .orElseThrow(()-> new InvalidEmailOrPasswordException("Invalid email or password"));
 
-        if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidEmailOrPasswordException("Invalid email or password");
         }
 
