@@ -49,6 +49,7 @@ public class LoginService {
                 .expiresAt(Instant.now().plusSeconds(expiresIn))
                 .claim("scope", scopes)
                 .claim("email", user.getEmail())
+                .claim("id", user.getId())
                 .claim("academyId", user.getAcademy().getId())
                 .build();
 
