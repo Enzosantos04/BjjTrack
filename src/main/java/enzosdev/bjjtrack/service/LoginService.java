@@ -49,8 +49,8 @@ public class LoginService {
                 .expiresAt(Instant.now().plusSeconds(expiresIn))
                 .claim("scope", scopes)
                 .claim("email", user.getEmail())
-                .claim("id", user.getId())
-                .claim("academyId", user.getAcademy().getId())
+                .claim("user_id", user.getId())
+                .claim("academy_id", user.getAcademy().getId())
                 .build();
 
         String token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaims)).getTokenValue();
