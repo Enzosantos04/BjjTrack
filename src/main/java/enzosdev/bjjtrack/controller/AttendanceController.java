@@ -27,7 +27,7 @@ public class AttendanceController {
         AttendanceResponse response = attendanceService.createAttendance(attendanceRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_attendance:read')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_attendance:write', 'SCOPE_admin:all')")
     @GetMapping
     public ResponseEntity<Page<AttendanceResponse>> findAllAttendances(Pageable pageable) {
         Page<AttendanceResponse> response = attendanceService.findAllAttendances(pageable);
@@ -36,6 +36,7 @@ public class AttendanceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AttendanceResponse> findAttendanceById(@PathVariable Long id) {
+        if (id == null) {}
         AttendanceResponse response = attendanceService.findAttendanceById(id);
         return ResponseEntity.ok(response);
     }
