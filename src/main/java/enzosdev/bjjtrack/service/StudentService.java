@@ -137,9 +137,13 @@ public class StudentService {
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
 
-    public StudentProfileUpdateResponse updateOwnProfileById(Long id, StudentProfileUpdateRequest request){
+    public StudentProfileUpdateResponse updateOwnProfileById(Long id, Long userIdLogged, StudentProfileUpdateRequest request){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        if (!student.getUser().getId().equals(userIdLogged)) {
+            throw new UnauthorizedAccessException("Access denied");
+        }
 
         if(request.getBirthDate() == null){
             throw new EmptyFieldException("Birth date is required");
