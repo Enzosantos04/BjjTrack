@@ -1,5 +1,6 @@
 package enzosdev.bjjtrack.controller;
 
+import enzosdev.bjjtrack.config.JwtUtils;
 import enzosdev.bjjtrack.dto.request.StudentAdminUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
@@ -14,6 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,10 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     private final StudentService studentService;
+    private final JwtUtils jwtUtils;
 
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, JwtUtils jwtUtils) {
         this.studentService = studentService;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping
@@ -81,8 +87,14 @@ public class StudentController {
 
 
     @PatchMapping("/{id}/me")
-    public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(@PathVariable Long id, @Valid @RequestBody StudentProfileUpdateRequest request){
-        StudentProfileUpdateResponse response = studentService.updateOwnProfileById(id, request);
+    @PreAuthorize("hasAuthority('SCOPE_profile:write')")
+    public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(
+            @PathVariable Long id, 
+            @AuthenticationPrincipal Jwt jwt, 
+            @Valid @RequestBody StudentProfileUpdateRequest request) {
+        
+        Long userIdLogged = jwtUtils.getUserIdToken(jwt);
+        StudentProfileUpdateResponse response = studentService.updateOwnProfileById(id, userIdLogged, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
