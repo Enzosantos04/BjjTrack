@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,6 +82,7 @@ public class StudentController {
 
 
     @PatchMapping("/{id}/me")
+    @PreAuthorize("#id == authentication.principal.claims['user_id']")
     public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(@PathVariable Long id, @Valid @RequestBody StudentProfileUpdateRequest request){
         StudentProfileUpdateResponse response = studentService.updateOwnProfileById(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
