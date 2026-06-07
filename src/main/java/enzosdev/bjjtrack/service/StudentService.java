@@ -149,7 +149,7 @@ public class StudentService {
             throw new EmptyFieldException("Birth date is required");
         }
 
-        student.setBrithDate(request.getBirthDate());
+        student.setBirthDate(request.getBirthDate());
 
         student = studentRepository.save(student);
 
