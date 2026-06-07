@@ -31,7 +31,7 @@ public class Student {
 
     @Column(name = "birth_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate brithDate;
+    private LocalDate birthDate;
 
     @Column(name = "last_promotion")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
