@@ -87,7 +87,7 @@ public class StudentController {
 
 
     @PatchMapping("/{id}/me")
-    @PreAuthorize("hasAuthority('SCOPE_profile:write')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_profile:write', 'SCOPE_admin:all')")
     public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(
             @PathVariable Long id, 
             @AuthenticationPrincipal Jwt jwt, 
