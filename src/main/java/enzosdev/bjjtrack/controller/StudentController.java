@@ -87,7 +87,7 @@ public class StudentController {
 
 
     @PatchMapping("/{id}/me")
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_profile:write', 'SCOPE_admin:all')")
+    @PreAuthorize("hasAuthority('SCOPE_profile:write')")
     public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(
             @PathVariable Long id, 
             @AuthenticationPrincipal Jwt jwt, 
@@ -98,6 +98,8 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
     @PatchMapping("/{id}/admin")
     public ResponseEntity<StudentAdminUpdateResponse> updateAdminStudentProfile(@PathVariable Long id, @Valid @RequestBody StudentAdminUpdateRequest request){
         StudentAdminUpdateResponse response = studentService.updateStudentAdminById(id, request);
