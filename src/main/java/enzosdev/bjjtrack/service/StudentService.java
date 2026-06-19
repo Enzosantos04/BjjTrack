@@ -19,6 +19,7 @@ import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.StudentRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -128,7 +129,7 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-
+    @Cacheable(value = "students", key = "#id")
     public StudentResponse findStudentById(Long id){
         Optional<Student> student = studentRepository.findById(id);
         return student.map(studentMapper::toResponse)
