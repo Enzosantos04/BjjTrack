@@ -34,6 +34,7 @@ public class AttendanceController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_attendance:read')")
     @GetMapping("/{id}")
     public ResponseEntity<AttendanceResponse> findAttendanceById(@PathVariable Long id) {
         if (id == null) {}
@@ -41,24 +42,28 @@ public class AttendanceController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_attendance:read')")
     @GetMapping("/academy/{id}")
     public ResponseEntity<Page<AttendanceResponse>> findAttendancesByAcademyId(@PathVariable Long id, Pageable pageable) {
         Page<AttendanceResponse> response = attendanceService.findAttendancesByAcademyId(id, pageable);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_attendance:read')")
     @GetMapping("/student/{id}")
     public ResponseEntity<Page<AttendanceResponse>> findAttendancesByStudentId(@PathVariable Long id, Pageable pageable) {
         Page<AttendanceResponse> response = attendanceService.findAttendancesByStudentId(id, pageable);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_attendance:write')")
     @PatchMapping("/{id}")
     public ResponseEntity<AttendanceResponse> updateAttendanceById(@PathVariable Long id, @Valid @RequestBody AttendanceRequest attendanceRequest) {
         AttendanceResponse response = attendanceService.updateAttendanceById(id, attendanceRequest);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_attendance:write')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAttendance(@PathVariable Long id) {
         attendanceService.deleteAttendance(id);

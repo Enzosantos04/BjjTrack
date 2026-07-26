@@ -33,18 +33,21 @@ public class StudentController {
         this.jwtUtils = jwtUtils;
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
     @PostMapping
     public ResponseEntity<StudentResponse> createStudent(@Valid @RequestBody StudentRequest studentRequest){
         StudentResponse studentResponse = studentService.createStudent(studentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:promote')")
     @PatchMapping("/{id}/stripe")
-   public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
+    public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
         StudentPromotionResponse promotionResponse = studentService.promoteStripe(id, promotionRequest);
         return ResponseEntity.status(HttpStatus.OK).body(promotionResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:promote')")
     @PatchMapping("/{id}/promote-belt")
     public ResponseEntity<StudentPromotionResponse> promoteStudentBelt(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
         StudentPromotionResponse studentResponse = studentService.promoteBelt(id, promotionRequest);
@@ -53,12 +56,14 @@ public class StudentController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
     @GetMapping
     public ResponseEntity<Page<StudentResponse>> findAllStudents(Pageable pageable){
        Page<StudentResponse> studentResponse = studentService.findAllStudents(pageable);
        return ResponseEntity.ok(studentResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
     @GetMapping("/academy/{id}")
     public ResponseEntity<Page<StudentResponse>> findStudentsByAcademyId(@PathVariable Long id, Pageable pageable){
         Page<StudentResponse> studentResponses = studentService.findStudentsByAcademyId(id, pageable);
@@ -66,6 +71,7 @@ public class StudentController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long id){
         studentService.deleteStudentById(id);
@@ -73,12 +79,14 @@ public class StudentController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
     @GetMapping(params = {"email"})
     public ResponseEntity<StudentResponse> findStudentByEmail(@RequestParam String email){
         StudentResponse studentResponse = studentService.findStudentByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id){
         StudentResponse studentResponse = studentService.findStudentById(id);
