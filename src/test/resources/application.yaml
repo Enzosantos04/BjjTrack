@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: BjjTrack
+
+  cache:
+    type: none
+
+jwt:
+  public:
+    key: classpath:authz.pub
+  private:
+    key: classpath:authz.pem
