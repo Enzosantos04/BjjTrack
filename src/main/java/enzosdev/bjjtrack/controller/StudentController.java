@@ -15,7 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import enzosdev.bjjtrack.config.annotations.CanManageStudent;
+import enzosdev.bjjtrack.config.annotations.CanPromoteStudent;
+import enzosdev.bjjtrack.config.annotations.CanReadStudent;
+import enzosdev.bjjtrack.config.annotations.CanWriteProfile;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -33,21 +36,21 @@ public class StudentController {
         this.jwtUtils = jwtUtils;
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageStudent
     @PostMapping
     public ResponseEntity<StudentResponse> createStudent(@Valid @RequestBody StudentRequest studentRequest){
         StudentResponse studentResponse = studentService.createStudent(studentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:promote')")
+    @CanPromoteStudent
     @PatchMapping("/{id}/stripe")
     public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
         StudentPromotionResponse promotionResponse = studentService.promoteStripe(id, promotionRequest);
         return ResponseEntity.status(HttpStatus.OK).body(promotionResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:promote')")
+    @CanPromoteStudent
     @PatchMapping("/{id}/promote-belt")
     public ResponseEntity<StudentPromotionResponse> promoteStudentBelt(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
         StudentPromotionResponse studentResponse = studentService.promoteBelt(id, promotionRequest);
@@ -56,14 +59,14 @@ public class StudentController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
+    @CanReadStudent
     @GetMapping
     public ResponseEntity<Page<StudentResponse>> findAllStudents(Pageable pageable){
        Page<StudentResponse> studentResponse = studentService.findAllStudents(pageable);
        return ResponseEntity.ok(studentResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
+    @CanReadStudent
     @GetMapping("/academy/{id}")
     public ResponseEntity<Page<StudentResponse>> findStudentsByAcademyId(@PathVariable Long id, Pageable pageable){
         Page<StudentResponse> studentResponses = studentService.findStudentsByAcademyId(id, pageable);
@@ -71,7 +74,7 @@ public class StudentController {
 
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageStudent
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long id){
         studentService.deleteStudentById(id);
@@ -79,14 +82,14 @@ public class StudentController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
+    @CanReadStudent
     @GetMapping(params = {"email"})
     public ResponseEntity<StudentResponse> findStudentByEmail(@RequestParam String email){
         StudentResponse studentResponse = studentService.findStudentByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all', 'SCOPE_student:read')")
+    @CanReadStudent
     @GetMapping("/{id}")
     public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id){
         StudentResponse studentResponse = studentService.findStudentById(id);
@@ -95,7 +98,7 @@ public class StudentController {
 
 
     @PatchMapping("/{id}/me")
-    @PreAuthorize("hasAuthority('SCOPE_profile:write')")
+    @CanWriteProfile
     public ResponseEntity<StudentProfileUpdateResponse> updateStudentOwnProfile(
             @PathVariable Long id, 
             @AuthenticationPrincipal Jwt jwt, 
@@ -107,7 +110,7 @@ public class StudentController {
     }
 
     
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageStudent
     @PatchMapping("/{id}/admin")
     public ResponseEntity<StudentAdminUpdateResponse> updateAdminStudentProfile(@PathVariable Long id, @Valid @RequestBody StudentAdminUpdateRequest request){
         StudentAdminUpdateResponse response = studentService.updateStudentAdminById(id, request);

@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import enzosdev.bjjtrack.config.annotations.CanManageAcademy;
+import enzosdev.bjjtrack.config.annotations.IsPlatformAdmin;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +29,7 @@ public class AcademyController {
     }
 
 
-    @PreAuthorize("hasAuthority('SCOPE_platform:admin')")
+    @IsPlatformAdmin
     @GetMapping
     public ResponseEntity<Page<AcademyResponse>> findAllAcademies(Pageable pageable){
         Page<AcademyResponse> academies = academyService.findAllAcademies(pageable);
@@ -36,21 +37,21 @@ public class AcademyController {
 
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_platform:admin')")
+    @IsPlatformAdmin
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAcademyById(@PathVariable Long id){
         academyService.deleteAcademyById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageAcademy
     @PatchMapping("/{id}")
     public ResponseEntity<AcademyResponse> updateAcademyById(@PathVariable Long id,@Valid @RequestBody AcademyUpdateRequest academyRequest){
         AcademyResponse academy= academyService.updateAcademyById(id, academyRequest);
         return ResponseEntity.status(HttpStatus.OK).body(academy);
     }
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageAcademy
     @GetMapping("{academyId}/users")
     public ResponseEntity<Page<UserResponse>> findAllUsersByAcademyId(@PathVariable Long academyId, Pageable pageable){
         Page<UserResponse> users = userService.listUsersByAcademyId(academyId,pageable);
@@ -58,7 +59,7 @@ public class AcademyController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageAcademy
     @GetMapping("/{id}")
     public ResponseEntity<AcademyResponse> findAcademyById(@PathVariable Long id){
         AcademyResponse academy = academyService.findAcademyById(id);
@@ -66,7 +67,7 @@ public class AcademyController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('SCOPE_platform:admin', 'SCOPE_admin:all')")
+    @CanManageAcademy
     @GetMapping("/slug/{slug}")
     public ResponseEntity<AcademyResponse> findAcademyBySlug(@PathVariable String slug){
         AcademyResponse academy = academyService.findAcademyBySlug(slug);
