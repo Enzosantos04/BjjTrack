@@ -1,5 +1,6 @@
 package enzosdev.bjjtrack.service;
 
+import enzosdev.bjjtrack.config.JwtUtils;
 import enzosdev.bjjtrack.dto.request.StudentAdminUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
@@ -12,11 +13,13 @@ import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.entity.Student;
 import enzosdev.bjjtrack.entity.User;
 import enzosdev.bjjtrack.enums.Belt;
+import enzosdev.bjjtrack.enums.ScopeName;
 import enzosdev.bjjtrack.exceptions.*;
 import enzosdev.bjjtrack.mapper.StudentMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import enzosdev.bjjtrack.repository.StudentRepository;
 import enzosdev.bjjtrack.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,12 +34,14 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final AcademyRepository academyRepository;
     private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
 
-    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, AcademyRepository academyRepository, UserRepository userRepository) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, AcademyRepository academyRepository, UserRepository userRepository, JwtUtils jwtUtils) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.academyRepository = academyRepository;
         this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     public StudentResponse createStudent(StudentRequest studentRequest){
@@ -124,7 +129,7 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-
+    @Cacheable(value = "students", key = "#id")
     public StudentResponse findStudentById(Long id){
         Optional<Student> student = studentRepository.findById(id);
         return student.map(studentMapper::toResponse)
@@ -137,7 +142,7 @@ public class StudentService {
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
 
-    public StudentProfileUpdateResponse updateOwnProfileById(Long id, Long userIdLogged, StudentProfileUpdateRequest request){
+    public StudentProfileUpdateResponse updateOwnProfileById(Long id, Long userIdLogged,  StudentProfileUpdateRequest request){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
@@ -149,7 +154,7 @@ public class StudentService {
             throw new EmptyFieldException("Birth date is required");
         }
 
-        student.setBrithDate(request.getBirthDate());
+        student.setBirthDate(request.getBirthDate());
 
         student = studentRepository.save(student);
 
@@ -169,8 +174,13 @@ public class StudentService {
             throw new InvalidStripesException("Stripe must be between 0 and 4");
         }
 
+        if (request.getBirthDate() == null){
+            throw new EmptyFieldException("Birth date is required");
+        }
+
         student.setBelt(request.getBelt());
         student.setStripes(request.getStripe());
+        student.setBirthDate(request.getBirthDate());
         student = studentRepository.save(student);
         return studentMapper.toAdminUpdateResponse(student);
     }

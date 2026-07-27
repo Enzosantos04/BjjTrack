@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import enzosdev.bjjtrack.config.annotations.CanManageUser;
+import enzosdev.bjjtrack.config.annotations.CanWriteProfile;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,12 +27,14 @@ public class UserController {
     }
 
 
+    @CanManageUser
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
         UserResponse userResponse = userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
+    @CanManageUser
     @PatchMapping("/{id}")
     public ResponseEntity<UserUpdateResponse> updateUserById(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
         UserUpdateResponse user = userService.UpdateUserById(id, userUpdateRequest);
@@ -38,30 +42,35 @@ public class UserController {
     }
 
 
+    @CanManageUser
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id){
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @CanManageUser
     @GetMapping
     public ResponseEntity<Page<UserResponse>> findAllUser(Pageable pageable){
         Page<UserResponse> users = userService.findAllUser(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
+    @CanManageUser
     @GetMapping(params = {"email", "academyId"})
     public ResponseEntity<UserResponse> findUserByEmail(@RequestParam String email, @RequestParam Long academyId){
         UserResponse userResponse = userService.findUserByEmail(email, academyId);
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
+    @CanManageUser
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findUserById(@PathVariable Long id){
         UserResponse userResponse = userService.findUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
+    @CanManageUser
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<?> deactivateUserById(@PathVariable Long id){
        userService.deactivateUserById(id);
@@ -69,6 +78,7 @@ public class UserController {
 
     }
 
+    @CanManageUser
     @PatchMapping("/{id}/activate")
     public ResponseEntity<?> activateUserById(@PathVariable Long id){
         userService.activateUserById(id);
@@ -76,6 +86,7 @@ public class UserController {
     }
 
 
+    @CanWriteProfile
     @PatchMapping("/{id}/update-email")
     public ResponseEntity<UserUpdateEmailResponse> updateEmail(@PathVariable Long id,@Valid  @RequestBody UserUpdateEmailRequest request){
         UserUpdateEmailResponse response = userService.updateEmailById(id, request);

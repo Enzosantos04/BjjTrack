@@ -18,7 +18,7 @@ public class StudentMapper {
         student.setAcademy(academy);
         student.setUser(user);
         student.setBelt(studentRequest.getBelt());
-        student.setBrithDate(studentRequest.getBirthDate());
+        student.setBirthDate(studentRequest.getBirthDate());
         student.setStripes(0);
         return student;
 
@@ -35,7 +35,7 @@ public class StudentMapper {
         dto.setId(student.getId());
         dto.setName(student.getUser().getName());
         dto.setEmail(student.getUser().getEmail());
-        dto.setBirthDate(student.getBrithDate());
+        dto.setBirthDate(student.getBirthDate());
         dto.setBelt(student.getBelt());
         if (student.getAcademy() != null){
             dto.setAcademyId(student.getAcademy().getId());
@@ -56,7 +56,7 @@ public class StudentMapper {
 
     public StudentProfileUpdateResponse toProfileUpdateResponse(Student student) {
         StudentProfileUpdateResponse response = new StudentProfileUpdateResponse();
-        response.setBirthDate(student.getBrithDate());
+        response.setBirthDate(student.getBirthDate());
         return response;
     }
 
