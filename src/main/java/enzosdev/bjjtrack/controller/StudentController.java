@@ -38,22 +38,28 @@ public class StudentController {
 
     @CanManageStudent
     @PostMapping
-    public ResponseEntity<StudentResponse> createStudent(@Valid @RequestBody StudentRequest studentRequest){
-        StudentResponse studentResponse = studentService.createStudent(studentRequest);
+    public ResponseEntity<StudentResponse> createStudent(@Valid @RequestBody StudentRequest studentRequest, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentResponse studentResponse = studentService.createStudent(studentRequest, academyIdLogged, isPlatformAdmin);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentResponse);
     }
 
     @CanPromoteStudent
     @PatchMapping("/{id}/stripe")
-    public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
-        StudentPromotionResponse promotionResponse = studentService.promoteStripe(id, promotionRequest);
+    public ResponseEntity<StudentPromotionResponse> promoteStudentStripe(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentPromotionResponse promotionResponse = studentService.promoteStripe(id, academyIdLogged, isPlatformAdmin, promotionRequest);
         return ResponseEntity.status(HttpStatus.OK).body(promotionResponse);
     }
 
     @CanPromoteStudent
     @PatchMapping("/{id}/promote-belt")
-    public ResponseEntity<StudentPromotionResponse> promoteStudentBelt(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest){
-        StudentPromotionResponse studentResponse = studentService.promoteBelt(id, promotionRequest);
+    public ResponseEntity<StudentPromotionResponse> promoteStudentBelt(@PathVariable Long id, @RequestBody StudentPromotionRequest promotionRequest, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentPromotionResponse studentResponse = studentService.promoteBelt(id, academyIdLogged, isPlatformAdmin, promotionRequest);
         return ResponseEntity.ok(studentResponse);
 
     }
@@ -61,38 +67,48 @@ public class StudentController {
 
     @CanReadStudent
     @GetMapping
-    public ResponseEntity<Page<StudentResponse>> findAllStudents(Pageable pageable){
-       Page<StudentResponse> studentResponse = studentService.findAllStudents(pageable);
+    public ResponseEntity<Page<StudentResponse>> findAllStudents(@AuthenticationPrincipal Jwt jwt, Pageable pageable){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+       Page<StudentResponse> studentResponse = studentService.findAllStudents(academyIdLogged, isPlatformAdmin, pageable);
        return ResponseEntity.ok(studentResponse);
     }
 
     @CanReadStudent
     @GetMapping("/academy/{id}")
-    public ResponseEntity<Page<StudentResponse>> findStudentsByAcademyId(@PathVariable Long id, Pageable pageable){
-        Page<StudentResponse> studentResponses = studentService.findStudentsByAcademyId(id, pageable);
+    public ResponseEntity<Page<StudentResponse>> findStudentsByAcademyId(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt, Pageable pageable){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        Page<StudentResponse> studentResponses = studentService.findStudentsByAcademyId(id, academyIdLogged, isPlatformAdmin, pageable);
         return ResponseEntity.ok(studentResponses);
 
     }
 
     @CanManageStudent
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteStudentById(@PathVariable Long id){
-        studentService.deleteStudentById(id);
+    public ResponseEntity<?> deleteStudentById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        studentService.deleteStudentById(id, academyIdLogged, isPlatformAdmin);
         return ResponseEntity.noContent().build();
     }
 
 
     @CanReadStudent
     @GetMapping(params = {"email"})
-    public ResponseEntity<StudentResponse> findStudentByEmail(@RequestParam String email){
-        StudentResponse studentResponse = studentService.findStudentByEmail(email);
+    public ResponseEntity<StudentResponse> findStudentByEmail(@RequestParam String email, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentResponse studentResponse = studentService.findStudentByEmail(email, academyIdLogged, isPlatformAdmin);
         return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
     }
 
     @CanReadStudent
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id){
-        StudentResponse studentResponse = studentService.findStudentById(id);
+    public ResponseEntity<StudentResponse> findUserById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentResponse studentResponse = studentService.findStudentById(id, academyIdLogged, isPlatformAdmin);
         return ResponseEntity.status(HttpStatus.OK).body(studentResponse);
     }
 
@@ -112,8 +128,10 @@ public class StudentController {
     
     @CanManageStudent
     @PatchMapping("/{id}/admin")
-    public ResponseEntity<StudentAdminUpdateResponse> updateAdminStudentProfile(@PathVariable Long id, @Valid @RequestBody StudentAdminUpdateRequest request){
-        StudentAdminUpdateResponse response = studentService.updateStudentAdminById(id, request);
+    public ResponseEntity<StudentAdminUpdateResponse> updateAdminStudentProfile(@PathVariable Long id, @Valid @RequestBody StudentAdminUpdateRequest request, @AuthenticationPrincipal Jwt jwt){
+        Long academyIdLogged = jwtUtils.getAcademyIdToken(jwt);
+        boolean isPlatformAdmin = jwtUtils.isPlatformAdmin(jwt);
+        StudentAdminUpdateResponse response = studentService.updateStudentAdminById(id, academyIdLogged, isPlatformAdmin, request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
