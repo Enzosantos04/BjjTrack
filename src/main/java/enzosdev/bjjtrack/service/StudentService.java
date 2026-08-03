@@ -1,6 +1,5 @@
 package enzosdev.bjjtrack.service;
 
-import enzosdev.bjjtrack.config.JwtUtils;
 import enzosdev.bjjtrack.dto.request.StudentAdminUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentProfileUpdateRequest;
 import enzosdev.bjjtrack.dto.request.StudentPromotionRequest;
@@ -34,21 +33,34 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final AcademyRepository academyRepository;
     private final UserRepository userRepository;
-    private final JwtUtils jwtUtils;
 
-    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, AcademyRepository academyRepository, UserRepository userRepository, JwtUtils jwtUtils) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, AcademyRepository academyRepository, UserRepository userRepository) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.academyRepository = academyRepository;
         this.userRepository = userRepository;
-        this.jwtUtils = jwtUtils;
     }
 
-    public StudentResponse createStudent(StudentRequest studentRequest){
+    private void validateSameAcademy(Long resourceAcademyId, Long academyIdLogged, boolean isPlatformAdmin){
+        if (isPlatformAdmin) {
+            return;
+        }
+        if (!resourceAcademyId.equals(academyIdLogged)){
+            throw new UnauthorizedAccessException("Access denied");
+        }
+    }
+
+    public StudentResponse createStudent(StudentRequest studentRequest, Long academyIdLogged, boolean isPlatformAdmin){
+        validateSameAcademy(studentRequest.getAcademyId(), academyIdLogged, isPlatformAdmin);
+
         User user = userRepository.findById(studentRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         Academy academy = academyRepository.findById(studentRequest.getAcademyId())
                 .orElseThrow(() -> new AcademyNotFoundException("Academy not found"));
+
+        if (!user.getAcademy().getId().equals(academy.getId())){
+            throw new UnauthorizedAccessException("Access denied");
+        }
 
         if (studentRepository.existsStudentByUserId(studentRequest.getUserId())){
             throw new StudentAlreadyExistsException("Student already exists");
@@ -61,9 +73,12 @@ public class StudentService {
 
     }
 
-    public StudentPromotionResponse promoteStripe(Long id, StudentPromotionRequest promotionRequest){
+    public StudentPromotionResponse promoteStripe(Long id, Long academyIdLogged, boolean isPlatformAdmin, StudentPromotionRequest promotionRequest){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        validateSameAcademy(student.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
+
         student.setLastPromotion(promotionRequest.getLastPromotion());
         student.setBelt(student.getBelt());
 
@@ -80,9 +95,11 @@ public class StudentService {
 
     }
 
-    public StudentPromotionResponse promoteBelt(Long id, StudentPromotionRequest promotionRequest){
+    public StudentPromotionResponse promoteBelt(Long id, Long academyIdLogged, boolean isPlatformAdmin, StudentPromotionRequest promotionRequest){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        validateSameAcademy(student.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         int stripes = student.getStripes();
         Enum<Belt> studentCurrentBelt = student.getBelt();
@@ -107,12 +124,19 @@ public class StudentService {
     }
 
 
-    public Page<StudentResponse> findAllStudents(Pageable pageable){
-        return studentRepository.findAllStudentsByUserActiveTrue(pageable)
+    public Page<StudentResponse> findAllStudents(Long academyIdLogged, boolean isPlatformAdmin, Pageable pageable){
+        if (isPlatformAdmin){
+            return studentRepository.findAllStudentsByUserActiveTrue(pageable)
+                    .map(studentMapper::toResponse);
+        }
+
+        return studentRepository.findAllStudentsByUserActiveTrueAndAcademyId(academyIdLogged, pageable)
                 .map(studentMapper::toResponse);
     }
 
-    public Page<StudentResponse> findStudentsByAcademyId(Long id, Pageable pageable){
+    public Page<StudentResponse> findStudentsByAcademyId(Long id, Long academyIdLogged, boolean isPlatformAdmin, Pageable pageable){
+        validateSameAcademy(id, academyIdLogged, isPlatformAdmin);
+
         if (!academyRepository.existsById(id)){
             throw new AcademyNotFoundException("Academy not found.");
         }
@@ -121,25 +145,36 @@ public class StudentService {
                 .map(studentMapper::toResponse);
     }
 
-    public void deleteStudentById(Long id){
-        if(!studentRepository.existsById(id)) {
-            throw new StudentNotFoundException("Student not found");
-        }
+    public void deleteStudentById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        validateSameAcademy(student.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         studentRepository.deleteById(id);
     }
 
-    @Cacheable(value = "students", key = "#id")
-    public StudentResponse findStudentById(Long id){
+    @Cacheable(value = "students", key = "#id + '-' + #academyIdLogged")
+    public StudentResponse findStudentById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
         Optional<Student> student = studentRepository.findById(id);
-        return student.map(studentMapper::toResponse)
+
+        Student foundStudent = student
                 .orElseThrow(() -> new StudentNotFoundException("Student not Found"));
+
+        validateSameAcademy(foundStudent.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
+
+        return studentMapper.toResponse(foundStudent);
     }
 
-    public StudentResponse findStudentByEmail(String email){
+    public StudentResponse findStudentByEmail(String email, Long academyIdLogged, boolean isPlatformAdmin){
         Optional<Student> student = studentRepository.findStudentByUserEmail(email);
-        return student.map(studentMapper::toResponse)
+
+        Student foundStudent = student
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
+
+        validateSameAcademy(foundStudent.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
+
+        return studentMapper.toResponse(foundStudent);
     }
 
     public StudentProfileUpdateResponse updateOwnProfileById(Long id, Long userIdLogged,  StudentProfileUpdateRequest request){
@@ -162,9 +197,11 @@ public class StudentService {
     }
 
 
-    public StudentAdminUpdateResponse updateStudentAdminById(Long id, StudentAdminUpdateRequest request){
+    public StudentAdminUpdateResponse updateStudentAdminById(Long id, Long academyIdLogged, boolean isPlatformAdmin, StudentAdminUpdateRequest request){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        validateSameAcademy(student.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         if(request.getBelt() == null){
             throw new EmptyFieldException("Belt is required");

@@ -42,7 +42,17 @@ public class UserService {
         this.scopeRepository = scopeRepository;
     }
 
-    public UserResponse createUser(UserRequest userRequest){
+    private void validateSameAcademy(Long resourceAcademyId, Long academyIdLogged, boolean isPlatformAdmin){
+        if (isPlatformAdmin) {
+            return;
+        }
+        if (!resourceAcademyId.equals(academyIdLogged)){
+            throw new UnauthorizedAccessException("Access denied");
+        }
+    }
+
+    public UserResponse createUser(UserRequest userRequest, Long academyIdLogged, boolean isPlatformAdmin){
+        validateSameAcademy(userRequest.getAcademyId(), academyIdLogged, isPlatformAdmin);
 
      if (userRepository.existsByAcademyIdAndEmailIgnoreCase(userRequest.getAcademyId(), userRequest.getEmail())){
          throw new UserEmailAlreadyExistsException("email already exists");
@@ -66,9 +76,11 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
-    public UserUpdateResponse UpdateUserById(Long id, UserUpdateRequest userUpdateRequest){
+    public UserUpdateResponse UpdateUserById(Long id, Long academyIdLogged, boolean isPlatformAdmin, UserUpdateRequest userUpdateRequest){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        validateSameAcademy(user.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         if(userUpdateRequest.getName() != null){
             if (userUpdateRequest.getName().isBlank()){
@@ -83,7 +95,9 @@ public class UserService {
 
     }
 
-    public Page<UserResponse> listUsersByAcademyId(Long id, Pageable pageable){
+    public Page<UserResponse> listUsersByAcademyId(Long id, Long academyIdLogged, boolean isPlatformAdmin, Pageable pageable){
+        validateSameAcademy(id, academyIdLogged, isPlatformAdmin);
+
         if(!academyRepository.existsById(id)){
             throw  new AcademyNotFoundException("Academy not found.");
         }
@@ -94,34 +108,47 @@ public class UserService {
 
     }
 
-    public void deleteUserById(Long id){
-        userRepository.findById(id)
+    public void deleteUserById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
+        User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        validateSameAcademy(user.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         userRepository.deleteById(id);
     }
 
 
-    public Page<UserResponse> findAllUser(Pageable pageable){
-        return userRepository.findAll(pageable)
+    public Page<UserResponse> findAllUser(Long academyIdLogged, boolean isPlatformAdmin, Pageable pageable){
+        if (isPlatformAdmin){
+            return userRepository.findAll(pageable)
+                    .map(userMapper::toResponse);
+        }
+
+        return userRepository.findByAcademyId(academyIdLogged, pageable)
                 .map(userMapper::toResponse);
     }
 
-    public UserResponse findUserByEmail(String email, Long academyId){
+    public UserResponse findUserByEmail(String email, Long academyId, Long academyIdLogged, boolean isPlatformAdmin){
+        validateSameAcademy(academyId, academyIdLogged, isPlatformAdmin);
+
         Optional<User> user = userRepository.findByEmailIgnoreCaseAndAcademyId(email, academyId);
         return user.map(userMapper::toResponse)
                 .orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
 
-    public UserResponse findUserById(Long id){
+    public UserResponse findUserById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
         Optional<User> user = userRepository.findById(id);
-        return user.map(userMapper::toResponse)
-                .orElseThrow(() -> new UserNotFoundException("User not Found"));
+        return user.map(foundUser -> {
+            validateSameAcademy(foundUser.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
+            return userMapper.toResponse(foundUser);
+        }).orElseThrow(() -> new UserNotFoundException("User not Found"));
     }
 
-    public void deactivateUserById(Long id){
+    public void deactivateUserById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        validateSameAcademy(user.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         if(!user.getActive()){
             throw new UserAlreadyDeactivatedException("User already deactivated");
@@ -131,9 +158,11 @@ public class UserService {
         userMapper.toResponse(deactivatedUser);
     }
 
-    public void activateUserById(Long id){
+    public void activateUserById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
+
+        validateSameAcademy(user.getAcademy().getId(), academyIdLogged, isPlatformAdmin);
 
         if(!user.getActive()){
             user.setActive(true);
@@ -147,11 +176,15 @@ public class UserService {
 
 
 
-     public UserUpdateEmailResponse updateEmailById(Long id, UserUpdateEmailRequest request) {
-         User user = userRepository.findById(id)
-                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+      public UserUpdateEmailResponse updateEmailById(Long id, Long userIdLogged, UserUpdateEmailRequest request) {
+          User user = userRepository.findById(id)
+                  .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-         String email = user.getEmail();
+          if (!user.getId().equals(userIdLogged)) {
+              throw new UnauthorizedAccessException("Access denied");
+          }
+
+          String email = user.getEmail();
          if(request.getNewEmail().isBlank()){
              throw new EmptyFieldException("empty field is not allowed");
          }

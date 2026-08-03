@@ -5,6 +5,7 @@ import enzosdev.bjjtrack.dto.request.AcademyUpdateRequest;
 import enzosdev.bjjtrack.entity.Academy;
 import enzosdev.bjjtrack.exceptions.AcademyNotFoundException;
 import enzosdev.bjjtrack.exceptions.EmptyFieldException;
+import enzosdev.bjjtrack.exceptions.UnauthorizedAccessException;
 import enzosdev.bjjtrack.mapper.AcademyMapper;
 import enzosdev.bjjtrack.repository.AcademyRepository;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,18 @@ public class AcademyService {
         academyRepository.deleteById(id);
     }
 
-    public AcademyResponse updateAcademyById(Long id, AcademyUpdateRequest academyUpdateRequest){
+    private void validateSameAcademy(Long resourceAcademyId, Long academyIdLogged, boolean isPlatformAdmin){
+        if (isPlatformAdmin) {
+            return;
+        }
+        if (!resourceAcademyId.equals(academyIdLogged)){
+            throw new UnauthorizedAccessException("Access denied");
+        }
+    }
+
+    public AcademyResponse updateAcademyById(Long id, Long academyIdLogged, boolean isPlatformAdmin, AcademyUpdateRequest academyUpdateRequest){
+        validateSameAcademy(id, academyIdLogged, isPlatformAdmin);
+
         Academy academy = academyRepository.findById(id)
                 .orElseThrow(()-> new AcademyNotFoundException("Academy not foud."));
 
@@ -68,7 +80,8 @@ public class AcademyService {
     }
 
 
-    public AcademyResponse findAcademyById(Long id){
+    public AcademyResponse findAcademyById(Long id, Long academyIdLogged, boolean isPlatformAdmin){
+        validateSameAcademy(id, academyIdLogged, isPlatformAdmin);
 
         Optional<Academy> academyResponse = academyRepository.findById(id);
               return academyResponse.map(academyMapper::toResponse)
@@ -76,10 +89,12 @@ public class AcademyService {
 
     }
 
-    public AcademyResponse findAcademyBySlug(String slug){
+    public AcademyResponse findAcademyBySlug(String slug, Long academyIdLogged, boolean isPlatformAdmin){
         Optional<Academy> academy  = academyRepository.findAcademyBySlugIgnoreCase(slug);
-        return academy.map(academyMapper::toResponse)
-                .orElseThrow(()-> new AcademyNotFoundException("Academy Not found"));
+        return academy.map(foundAcademy -> {
+            validateSameAcademy(foundAcademy.getId(), academyIdLogged, isPlatformAdmin);
+            return academyMapper.toResponse(foundAcademy);
+        }).orElseThrow(()-> new AcademyNotFoundException("Academy Not found"));
 
     }
 
