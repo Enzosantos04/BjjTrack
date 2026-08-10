@@ -34,5 +34,6 @@ build/
 .env
 *.pem
 *.pub
+.DS_Store
 
 /docs
